@@ -52,6 +52,11 @@ function voltarDashboardPersonal() {
   window.location.href = 'dashboard-personal.html'; 
 }
 
+function voltarDashboardAluno() {  
+  // Redireciona para a página do dashboard. Você pode mudar a URL para a correta.  
+  window.location.href = 'dashboard-aluno.html'; 
+}
+
 function exit() {  
   // Redireciona para a página index  
   window.location.href = 'index.html';

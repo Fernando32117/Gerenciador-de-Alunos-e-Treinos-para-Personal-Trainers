@@ -19,8 +19,19 @@
 
     h1 {  
         color: #333; /* Cor do título */  
-        text-align: center; /* Centraliza o título */  
-    }  
+        text-align: center; /* Centraliza o título */
+    } 
+    
+    button {  
+        margin: 10px 0;  
+        padding: 10px;  
+        width: 30%; /* Larga 100% da largura do formulário */  
+        max-width: 50%; /* Não excede a largura do formulário */  
+        border: 1px solid #ccc;  
+        border-radius: 5px;  
+        box-sizing: border-box;  
+        transition: border-color 0.3s;  
+    }
 
     #treinos-lista {  
     display: flex; /* Ativa o Flexbox */  
@@ -28,17 +39,17 @@
     justify-content: flex-start; /* Alinha os itens na parte superior */  
 }  
 
-.treino-item {  
-    background-color: white; /* Fundo branco para os treinos */  
-    border: 1px solid #ccc; /* Borda cinza */  
-    border-radius: 8px; /* Bordas arredondadas */  
-    padding: 8px; /* Espaçamento interno ajustado */  
-    margin: 3px; /* Margem entre os cards reduzida */  
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */  
-    transition: transform 0.2s; /* Transição suave para hover */  
-    flex: 0 1 calc(40% - 6px); /* Ajusta a largura dos cards para 40% */  
-    box-sizing: border-box; /* Inclui padding e border no cálculo da largura */  
-}  
+    .treino-item {  
+        background-color: white; /* Fundo branco para os treinos */  
+        border: 1px solid #ccc; /* Borda cinza */  
+        border-radius: 8px; /* Bordas arredondadas */  
+        padding: 8px; /* Espaçamento interno ajustado */  
+        margin: 3px; /* Margem entre os cards reduzida */  
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */  
+        transition: transform 0.2s; /* Transição suave para hover */  
+        flex: 0 1 calc(40% - 6px); /* Ajusta a largura dos cards para 40% */  
+        box-sizing: border-box; /* Inclui padding e border no cálculo da largura */  
+    }  
 
     .treino-item:hover {  
         transform: scale(1.02); /* Efeito de zoom ao passar o mouse */  
@@ -46,7 +57,8 @@
 
     .treino-item h2 {  
         color: #007BFF; /* Cor do título do treino */  
-        margin: 0 0 10px; /* Margem abaixo do título */
+        margin: 0 0 2px; /* Margem abaixo do título */
+        
     }  
 
     .treino-item p {  
@@ -56,8 +68,9 @@
 </style>
 </head>
 <body>  
-  <h1>Treinos do Aluno</h1>  
-  <div id="treinos-lista"></div>  
+  <h1>Treinos do Aluno</h1>
+  <button type="button" onclick="voltarDashboardAluno()">Voltar ao Dashboard</button>   
+  <div id="treinos-lista"></div>
 
   <script>  
     const treinos = [  
