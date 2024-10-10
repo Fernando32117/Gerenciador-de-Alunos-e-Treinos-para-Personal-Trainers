@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treinos do Aluno</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-firestore.js"></script>
+  <script src="scripts.js"></script>
+  <style>  
+    body {  
+        font-family: Arial, sans-serif;  
+        background-color: #f0f0f0; /* Fundo claro */  
+        margin: 0;  
+        padding: 20px;  
+    }  
+
+    h1 {  
+        color: #333; /* Cor do título */  
+        text-align: center; /* Centraliza o título */  
+    }  
+
+    #treinos-lista {  
+    display: flex; /* Ativa o Flexbox */  
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */  
+    justify-content: flex-start; /* Alinha os itens na parte superior */  
+}  
+
+.treino-item {  
+    background-color: white; /* Fundo branco para os treinos */  
+    border: 1px solid #ccc; /* Borda cinza */  
+    border-radius: 8px; /* Bordas arredondadas */  
+    padding: 8px; /* Espaçamento interno ajustado */  
+    margin: 3px; /* Margem entre os cards reduzida */  
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */  
+    transition: transform 0.2s; /* Transição suave para hover */  
+    flex: 0 1 calc(40% - 6px); /* Ajusta a largura dos cards para 40% */  
+    box-sizing: border-box; /* Inclui padding e border no cálculo da largura */  
+}  
+
+    .treino-item:hover {  
+        transform: scale(1.02); /* Efeito de zoom ao passar o mouse */  
+    }  
+
+    .treino-item h2 {  
+        color: #007BFF; /* Cor do título do treino */  
+        margin: 0 0 10px; /* Margem abaixo do título */
+    }  
+
+    .treino-item p {  
+        color: #555; /* Cor do texto */  
+        margin: 5px 0; /* Margem entre os parágrafos */  
+    }  
+</style>
+</head>
+<body>  
+  <h1>Treinos do Aluno</h1>  
+  <div id="treinos-lista"></div>  
+
+  <script>  
+    const treinos = [  
+        { nome: "Treino de Quadríceps", descricao: "Hipertrofia.", duracao: "1h45" },  
+        { nome: "Treino de Peito", descricao: "Hipertrofia.", duracao: "1h30" },  
+        { nome: "Treino de Costas", descricao: "Hipertrofia.", duracao: "1h30" },  
+        { nome: "Treino Braço", descricao: "Hipertrofia.", duracao: "1h30" },  
+        { nome: "Treino de Posterior", descricao: "Hipertrofia.", duracao: "1h30" },
+        { nome: "Treino Full Body", descricao: "Hipertrofia.", duracao: "1h45" }  
+    ];  
+
+    function renderizarTreinos() {  
+        const treinosLista = document.getElementById("treinos-lista");  
+        treinosLista.innerHTML = "";  
+
+        treinos.forEach(treino => {  
+            const treinoDiv = document.createElement("div");  
+            treinoDiv.className = "treino-item";  
+            treinoDiv.innerHTML = `  
+                <h2>${treino.nome}</h2>  
+                <p><strong>Descrição:</strong> ${treino.descricao}</p>  
+                <p><strong>Duração:</strong> ${treino.duracao}</p>  
+            `;  
+            treinosLista.appendChild(treinoDiv);  
+        });  
+    }  
+
+    renderizarTreinos();  
+</script>  
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Aluno</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-firestore.js"></script>
+  <style>  
+    body {  
+        background-color: #f0f0f0; /* Fundo claro */  
+        font-family: Arial, sans-serif; /* Fonte legível */  
+    }  
+    .cadastro-aluno {  
+        display: flex;  
+        flex-direction: column;  
+        align-items: center;  
+        justify-content: center;  
+        height: 100vh; /* Centraliza verticalmente */  
+    }  
+    #formCadastroAluno {  
+        display: flex;  
+        flex-direction: column;  
+        align-items: center;  
+        background-color: #fff; /* Fundo branco para o formulário */  
+        padding: 20px;  
+        border-radius: 10px; /* Bordas arredondadas */  
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */  
+        width: 200%; /* Largura do formulário */  
+        max-width: 1000px;
+        max-width: 800px; /* Largura máxima */  
+        box-sizing: border-box; /* Inclui padding e border na largura total */  
+    }  
+    label {  
+        margin-top: 10px;  
+        font-weight: bold; /* Destaca os labels */  
+    }  
+    select, input, button {  
+        margin: 10px 0;  
+        padding: 10px;  
+        width: 100%; /* Larga 100% da largura do formulário */  
+        max-width: 100%; /* Não excede a largura do formulário */  
+        border: 1px solid #ccc; /* Borda padrão */  
+        border-radius: 5px; /* Bordas arredondadas */  
+        box-sizing: border-box; /* Inclui padding e border na largura total */  
+        transition: border-color 0.3s; /* Transição suave */  
+    }  
+    select:focus, input:focus {  
+        border-color: #007BFF; /* Cor ao focar */  
+        outline: none; /* Remove contorno padrão */  
+    }  
+    button {  
+        background-color: #007BFF; /* Cor do botão */  
+        color: white; /* Texto branco */  
+        border: none; /* Remove borda padrão */  
+        cursor: pointer; /* Muda o cursor ao passar o mouse */  
+    }  
+    button:hover {  
+        background-color: #0056b3; /* Cor ao passar o mouse */  
+    }  
+    h1 {  
+        text-align: center;  
+        color: #333; /* Cor do texto */  
+    }  
+</style>
+</head>
+<body>
+  <div class="cadastro-aluno">  
+    <h1>Cadastro do Aluno</h1>  
+    <form id="formCadastroAluno" onsubmit="handleCadastroAluno(event)">  
+        <label for="aluno-genero">Gênero</label>  
+        <select id="aluno-genero" required>  
+            <option value="">Escolha o gênero</option>  
+            <option value="homem">Homem</option>  
+            <option value="mulher">Mulher</option>  
+            <option value="nao-responder">Prefiro não responder</option>  
+        </select>  
+        
+        <label for="aluno-data-nasc">Data de Nascimento</label>  
+        <input type="date" id="aluno-data-nasc" required>  
+        
+        <label for="aluno-peso">Peso</label>  
+        <input type="number" id="aluno-peso" placeholder="Peso" required>  
+        
+        <label for="aluno-altura">Altura</label>  
+        <input type="number" id="aluno-altura" placeholder="Altura" required>  
+        
+        <label for="aluno-login">Login</label>  
+        <input type="text" id="aluno-login" placeholder="Login" required>  
+        
+        <label for="aluno-senha">Senha</label>  
+        <input type="password" id="aluno-senha" placeholder="Senha" required>  
+        
+        <button type="submit">Cadastrar</button>  
+        <button type="button" onclick="voltarDashboardPersonal()">Voltar ao Dashboard</button>  
+    </form>  
+</div>
+  <script src="scripts.js"></script>
+</body>
+</html>
