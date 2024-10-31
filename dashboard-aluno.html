@@ -5,72 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Aluno</title>
   <link rel="stylesheet" href="styles.css">
-  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-firestore.js"></script>
-  <style>
-    body {  
-    display: flex;  
-    align-items: center;  
-    justify-content: center;  
-    height: 100vh; /* Ocupa toda a altura da tela */  
-    background-color: #f0f0f0; /* Fundo claro */  
-    font-family: Arial, sans-serif; /* Fonte legível */  
-    margin: 0; /* Remove margens padrão */  
-}  
-
-.dashboard-aluno {  
-    background-color: white; /* Fundo branco para o dashboard */  
-    padding: 20px; /* Espaçamento interno */  
-    border-radius: 10px; /* Bordas arredondadas */  
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */  
-    width: 300px; /* Largura fixa do dashboard */  
-    text-align: center; /* Centraliza o texto */  
-}  
-
-header {  
-    display: flex;  
-    justify-content: space-between; /* Espaço entre nome e notificação */  
-    align-items: center; /* Alinha verticalmente */  
-    margin-bottom: 20px; /* Espaçamento abaixo do cabeçalho */  
-}  
-
-.aluno-nome {  
-    font-size: 20px; /* Tamanho da fonte do nome */  
-    color: #333; /* Cor do texto */  
-}  
-
-.notificacao {  
-    font-size: 24px; /* Tamanho do ícone de notificação */  
-}  
-
-.button-container {  
-    display: flex;  
-    flex-direction: column; /* Coloca os botões em coluna */  
-    gap: 10px; /* Espaçamento entre os botões */  
-}  
-
-button {  
-    background-color: #007BFF; /* Cor do botão */  
-    color: white; /* Texto branco */  
-    border: none; /* Remove borda padrão */  
-    border-radius: 5px; /* Bordas arredondadas */  
-    padding: 10px; /* Espaçamento interno */  
-    cursor: pointer; /* Muda o cursor ao passar o mouse */  
-    transition: background-color 0.3s; /* Transição suave */  
-    font-size: 16px; /* Tamanho da fonte */  
-}  
-
-button:hover {  
-    background-color: #0056b3; /* Cor ao passar o mouse */  
-}
-  </style>
 </head>
 <body>
-  <div class="dashboard-aluno">  
+  <div class="dashboard">  
     <header>  
-        <div class="aluno-nome">Nome do Aluno</div>  
-        <div class="notificacao"><span>🔔</span></div>  
+        <div class="name">Nome do Aluno</div>  
+        <div class="notificacao-aluno"><span>🔔</span></div>  
     </header>  
     <div class="button-container">  
         <button type="button" onclick="treino()">Treinos</button>  

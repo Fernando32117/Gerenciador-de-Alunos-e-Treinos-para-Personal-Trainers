@@ -6,88 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Personal</title>
   <link rel="stylesheet" href="styles.css">
-  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-firestore.js"></script>
-  <style>
-    .dashboard-personal {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      /* Centraliza verticalmente */
-      background-color: #f0f0f0;
-      /* Fundo claro */
-      font-family: Arial, sans-serif;
-      /* Fonte legível */
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      padding: 20px;
-      background-color: #007BFF;
-      /* Cor do cabeçalho */
-      color: white;
-      /* Texto branco */
-      border-radius: 10px 10px 0 0;
-      /* Bordas arredondadas no topo */
-    }
-
-    .personal-name {
-      font-size: 1.5em;
-      /* Tamanho da fonte do nome */
-    }
-
-    .notification-icon {
-      font-size: 1.5em;
-      /* Tamanho do ícone de notificação */
-    }
-
-    .button-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 20px;
-      /* Espaçamento acima dos botões */
-    }
-
-    button {
-      background-color: #007BFF;
-      /* Cor do botão */
-      color: white;
-      /* Texto branco */
-      border: none;
-      /* Remove borda padrão */
-      border-radius: 5px;
-      /* Bordas arredondadas */
-      padding: 15px 30px;
-      /* Espaçamento interno */
-      margin: 10px 0;
-      /* Espaçamento entre os botões */
-      cursor: pointer;
-      /* Muda o cursor ao passar o mouse */
-      transition: background-color 0.3s;
-      /* Transição suave */
-      width: 200px;
-      /* Largura fixa dos botões */
-    }
-
-    button:hover {
-      background-color: #0056b3;
-      /* Cor ao passar o mouse */
-    }
-  </style>
 </head>
 
 <body>
-  <div class="dashboard-personal">
+  <div class="dashboard">
     <header>
       <div class="notification-icon"><span>🏋️‍♀️</span></div>
-      <div class="personal-name">Nome do Personal</div>
+      <div class="name">Nome do Personal</div>
       <div class="notification-icon"><span>🏋️</span></div>
     </header>
     <div class="button-container">

@@ -1,121 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Treino</title>
   <link rel="stylesheet" href="styles.css">
-  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-firestore.js"></script>
   <script src="scripts.js"></script>
-  <style>  
-    #preview {  
-        margin-top: 10px;  
-        max-width: 200px; /* Impede que a imagem fique maior que o formulário */  
-        height: 200px;  
-    }  
-    body {  
-        background-color: #f0f0f0; /* Fundo claro */  
-        font-family: Arial, sans-serif; /* Fonte legível */  
-    }  
-    .cadastro-treino {  
-        display: flex;  
-        flex-direction: column;  
-        align-items: center;  
-        justify-content: center;  
-        height: 80vh;  
-    }  
-    #formCadastroTreino {  
-        display: flex;  
-        flex-direction: column;  
-        align-items: center;  
-        background-color: #fff;  
-        padding: 20px;  
-        border-radius: 10px;  
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  
-        width: 200%; /* Largura do formulário */  
-        max-width: 1000px; /* Largura máxima */  
-        box-sizing: border-box; /* Inclui padding e border na largura total */  
-    }  
-    label {  
-        margin-top: 10px;  
-        font-weight: bold;  
-    }  
-    input, button {  
-        margin: 10px 0;  
-        padding: 10px;  
-        width: 100%; /* Larga 100% da largura do formulário */  
-        max-width: 100%; /* Não excede a largura do formulário */  
-        border: 1px solid #ccc;  
-        border-radius: 5px;  
-        box-sizing: border-box;  
-        transition: border-color 0.3s;  
-    }  
-    input:focus {  
-        border-color: #007BFF;  
-        outline: none;  
-    }  
-    button {  
-        background-color: #007BFF;  
-        color: white;  
-        border: none;  
-        cursor: pointer;  
-    }  
-    button:hover {  
-        background-color: #0056b3;  
-    }  
-    h1, h3 {  
-        text-align: center;  
-        color: #333;  
-    }
-</style>
 </head>
+
 <body>
-  <div class="cadastro-treino">  
-      
-    <form id="formCadastroTreino" onsubmit="handleCadastroTreino(event)">  
-        <label for="grupo-muscular">Grupo Muscular</label>  
-        <input type="text" id="grupo-muscular" placeholder="Grupo Muscular" required>  
-        
-        <label for="series">Séries</label>  
-        <input type="number" id="series" placeholder="Séries" required>  
-        
-        <label for="repeticoes">Repetições</label>  
-        <input type="number" id="repeticoes" placeholder="Repetições" required>  
-        
-        <label for="observacoes">Observações</label>  
-        <input type="text" id="observacoes" placeholder="Observações">  
-        
-        <h3>Escolha o exemplo do Exercício</h3>  
-        <input type="file" id="gifInput" accept="image/gif" required>  
-        <img id="preview" src="" alt="Preview do GIF" style="display:none;">  
-        
-        <button type="submit">Cadastrar Treino</button>  
-        <button type="button" onclick="voltarDashboardPersonal()">Voltar ao Dashboard</button>  
-    </form>  
-</div>
+  <div class="cadastro">
 
-  <script>  
-    const gifInput = document.getElementById('gifInput');  
-    const preview = document.getElementById('preview');  
+    <form id="formCadastro" onsubmit="handleCadastroTreino(event)">
+      <label for="grupo-muscular">Grupo Muscular</label>
+      <input type="text" id="grupo-muscular" placeholder="Grupo Muscular" required>
 
-    gifInput.addEventListener('change', function(event) {  
-        const file = event.target.files[0];  
-        if (file && file.type === 'image/gif') {  
-            const reader = new FileReader();  
-            
-            reader.onload = function(e) {  
-                preview.src = e.target.result;  
-                preview.style.display = 'block'; // Exibe a imagem  
-            }  
-            
-            reader.readAsDataURL(file);  
-        } else {  
-            alert('Por favor, selecione um arquivo GIF válido.');  
-            preview.style.display = 'none'; // Oculta a imagem se não for um GIF  
-        }  
+      <label for="series">Séries</label>
+      <input type="number" id="series" placeholder="Séries" required>
+
+      <label for="repeticoes">Repetições</label>
+      <input type="number" id="repeticoes" placeholder="Repetições" required>
+
+      <label for="observacoes">Observações</label>
+      <input type="text" id="observacoes" placeholder="Observações">
+
+      <h3>Escolha o exemplo do Exercício</h3>
+      <input type="file" id="gifInput" accept="image/gif" required>
+      <img id="preview" src="" alt="Preview do GIF" style="display:none;">
+
+      <button type="submit">Cadastrar Treino</button>
+      <button type="button" onclick="voltarDashboardPersonal()">Voltar ao Dashboard</button>
+    </form>
+  </div>
+
+  <script>
+    const gifInput = document.getElementById('gifInput');
+    const preview = document.getElementById('preview');
+
+    gifInput.addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file && file.type === 'image/gif') {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block'; // Exibe a imagem  
+        }
+
+        reader.readAsDataURL(file);
+      } else {
+        alert('Por favor, selecione um arquivo GIF válido.');
+        preview.style.display = 'none'; // Oculta a imagem se não for um GIF  
+      }
     });
-</script>
+  </script>
 </body>
+
 </html>
