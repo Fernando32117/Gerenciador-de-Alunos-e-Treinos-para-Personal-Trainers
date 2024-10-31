@@ -11,16 +11,15 @@
 <body>
     <div class="login">
         <h1>Login do Personal</h1>
-        <form id="login-form">
+        <form id="login-form" onsubmit="handlePersonalLogin(event)">
             <input type="email" id="personal-email" placeholder="Email" required>
             <input type="password" id="personal-password" placeholder="Senha" required>
             <input type="text" id="personal-cref" placeholder="CREF" required>
             <div class="button-container">
-                <button onclick="handlePersonalLogin()">Login</button>
+                <button type="submit">Login</button>
                 <button type="button" onclick="exit()">Voltar</button>
             </div>
         </form>
-
     </div>
     <script src="scripts.js"></script>
 </body>

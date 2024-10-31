@@ -11,15 +11,15 @@
 <body>
   <div class="login">
     <h1>Login do Aluno</h1>
-    <form id="login-form">
-      <input type="email" id="aluno-email" placeholder="Email" required>
-      <input type="password" id="aluno-password" placeholder="Senha" required>
-      <div class="button-container">
-        <button onclick="handleAlunoLogin()">Login</button>
-        <button type="button" onclick="exit()">Voltar</button>
-      </div>
+    <form id="login-form" onsubmit="handleAlunoLogin(event)">
+        <input type="email" id="aluno-email" placeholder="Email" required>
+        <input type="password" id="aluno-password" placeholder="Senha" required>
+        <div class="button-container">
+            <button type="submit">Login</button>
+            <button type="button" onclick="exit()">Voltar</button>
+        </div>
     </form>
-  </div>
+</div>
   <script src="scripts.js"></script>
 </body>
 

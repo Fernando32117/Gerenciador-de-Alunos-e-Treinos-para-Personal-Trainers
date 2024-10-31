@@ -1,30 +1,29 @@
+function handlePersonalLogin(event) {
+  event.preventDefault();
 
-function handlePersonalLogin() {
-  const email = document.getElementById('personal-email').value;
-  const password = document.getElementById('personal-password').value;
-  const cref = document.getElementById('personal-cref').value;
+  const email = document.getElementById("personal-email").value;
+  const password = document.getElementById("personal-password").value;
+  const cref = document.getElementById("personal-cref").value;
+
   if (email && password && cref) {
-    alert('Login realizado com sucesso!');
-    window.location.href = 'dashboard-personal.html';
+    alert("Login realizado com sucesso !");
+      window.location.href = "dashboard-personal.html";
   } else {
-    alert('Por favor, preencha todos os campos.');
+    alert("Por favor, preencha todos os campos!");
   }
 }
 
-function exit() {
-  window.history.back();
-}
+function handleAlunoLogin(event) {
+  event.preventDefault();
 
-
-function handleAlunoLogin() {
-  const email = document.getElementById('aluno-email').value;
-  const password = document.getElementById('aluno-password').value;
+  const email = document.getElementById("aluno-email").value;
+  const password = document.getElementById("aluno-password").value;
 
   if (email && password) {
-    alert('Login realizado com sucesso!');
-    window.location.href = 'dashboard-aluno.html';
+    alert("Login realizado com sucesso !");
+      window.location.href = "dashboard-aluno.html";
   } else {
-    alert('Por favor, preencha todos os campos.');
+    alert("Por favor, preencha todos os campos!");
   }
 }
 
