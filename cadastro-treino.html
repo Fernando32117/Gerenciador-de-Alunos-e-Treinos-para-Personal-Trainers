@@ -13,8 +13,19 @@
   <div class="cadastro">
 
     <form id="formCadastro" onsubmit="handleCadastroTreino(event)">
+      <label for="aluno">Buscar Aluno</label>
+      <input type="text" id="aluno" oninput="buscarAluno(event)" placeholder="Digite o nome do aluno" required>
+      <!-- <div id="lista-alunos" class="lista-alunos" style="display:none;"></div> -->
+
       <label for="grupo-muscular">Grupo Muscular</label>
-      <input type="text" id="grupo-muscular" placeholder="Grupo Muscular" required>
+      <select id="grupo-muscular" required>
+        <option value=""></option>
+        <option value="peito">Peito</option>
+        <option value="perna">Perna</option>
+        <option value="costa">Costa</option>
+        <option value="ombro">Ombro</option>
+        <option value="braco-antebraco">Braço/Antebraço</option>
+      </select>
 
       <label for="series">Séries</label>
       <input type="number" id="series" placeholder="Séries" required>
@@ -25,13 +36,13 @@
       <label for="observacoes">Observações</label>
       <input type="text" id="observacoes" placeholder="Observações">
 
-      <h3>Escolha o exemplo do Exercício</h3>
+      <h3>Escolha o Exemplo do Exercício</h3>
       <input type="file" id="gifInput" accept="image/gif" required>
       <img id="preview" src="" alt="Preview do GIF" style="display:none;">
 
       <button type="submit">Cadastrar Treino</button>
       <button type="button" onclick="voltarDashboardPersonal()">Voltar ao Dashboard</button>
-    </form>
+  </form>
   </div>
 
   <script>
