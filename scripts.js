@@ -1,11 +1,35 @@
+document.getElementById("loginPersonalForm").addEventListener("submit", function(e) {  
+  e.preventDefault(); // Previne o comportamento padrão do formulário  
+
+  const personalPassword = document.getElementById("personalPassword").value;  
+  const personalEmail = document.getElementById("personalEmail").value;
+  const personalCref = document.getElementById("personalCref").value;  
+
+  // Enviar os dados para a API  
+  fetch('http://localhost:3000/usuarioPersonal', {  
+      method: 'POST',  
+      headers: {  
+          'Content-Type': 'application/json'  
+      },  
+      body: JSON.stringify({ personalPassword, personalEmail, personalCref })  
+  })  
+  .then(response => response.json())  
+  .then(data => {  
+      console.log('Sucesso:', data);  
+      alert('Usuário cadastrado com sucesso! ID: ' + data.id);  
+  })  
+  .catch((error) => {  
+      console.error('Erro:', error);  
+  });  
+});
+
+
 function handlePersonalLogin(event) {
   event.preventDefault();
-
-  const email = document.getElementById("personal-email").value;
-  const password = document.getElementById("personal-password").value;
-  const cref = document.getElementById("personal-cref").value;
-
-  if (email && password && cref) {
+  const personalEmail = document.getElementById("personalEmail").value;
+  const personalPassword = document.getElementById("personalPassword").value;
+  const personalCref = document.getElementById("personalCref").value;
+  if (personalEmail && personalPassword && personalCref) {
     alert("Login realizado com sucesso !");
     window.location.href = "dashboard-personal.html";
   } else {
