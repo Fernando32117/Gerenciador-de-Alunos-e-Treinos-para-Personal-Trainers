@@ -20,31 +20,56 @@ const db = new sqlite3.Database('./meu_banco.db', (err) => {
   }
 });
 
-// Criar tabela se não existir  
+// Criar tabela se não existir 
 db.run(`CREATE TABLE IF NOT EXISTS usuarioPersonal (  
-  id INTEGER PRIMARY KEY AUTOINCREMENT,  
-  personalEmail TEXT NOT NULL,  
-  personalPassword TEXT NOT NULL,
-  personalCref TEXT NOT NULL
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nome TEXT NOT NULL, 
+  email TEXT NOT NULL,  
+  password TEXT NOT NULL,
+  cref TEXT NOT NULL
 )`);
+
+db.run(`CREATE TABLE IF NOT EXISTS usuarioAluno (  
+  id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  nomeAluno TEXT NOT NULL,  
+  generoAluno TEXT NOT NULL,
+  alunoNascimento DATE NOT NULL,
+  alunoPeso TEXT NOT NULL,
+  alunoAltura TEXT NOT NULL,
+  alunoLogin TEXT NOT NULL,
+  alunoSenha TEXT NOT NULL
+)`);
+
 
 // Criar uma rota POST para o login do personal trainer
 app.post('/usuarioPersonal', (req, res) => {
-  const { personalEmail, personalPassword, personalCref } = req.body;
 
-  // // Verifica se todos os campos foram preenchidos
-  // if (!personalEmail || !personalPassword || !personalCref) {
-  //   return res.status(400).json({ error: 'Por favor, preencha todos os campos!' });
-  // }
+  const { nome, email, password, cref } = req.body;
 
-  const sql = `INSERT INTO usuarioPersonal (personalEmail, personalPassword, personalCref) VALUES (?, ?)`;  
-    db.run(sql, [personalEmail, personalPassword, personalCref], function(err) {  
-        if (err) {  
-            return console.error(err.message);  
-        }  
-        res.json({ id: this.lastID }); // Retorna o ID do novo registro  
-    });
+  const sql = `INSERT INTO usuarioPersonal (nome, email, password, cref) VALUES (?, ?, ?, ?)`;
+  db.run(sql, [nome, email, password, cref], function (err) {
+    if (err) {
+      return console.error(err.message);
+    }
+    res.json({ id: this.lastID }); // Retorna o ID do novo registro  
+  });
 });
+
+// Criar uma rota POST para o login do aluno
+app.post('/usuarioAluno', (req, res) => {
+
+  const { nomeAluno, generoAluno, alunoNascimento, alunoPeso, alunoAltura, alunoLogin, alunoSenha } = req.body;
+
+  const sql = `INSERT INTO usuarioAluno (nomeAluno, generoAluno, alunoNascimento, alunoPeso, alunoAltura, alunoLogin, alunoSenha) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  db.run(sql, [nomeAluno, generoAluno, alunoNascimento, alunoPeso, alunoAltura, alunoLogin, alunoSenha], function (err) {
+    if (err) {
+      return console.error(err.message);
+    }
+    res.json({ id: this.lastID }); // Retorna o ID do novo registro  
+  });
+});
+
+
 
 // Iniciar o servidor Express
 app.listen(port, () => {

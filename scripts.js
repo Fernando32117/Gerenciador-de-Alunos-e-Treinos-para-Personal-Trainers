@@ -1,27 +1,60 @@
-document.getElementById("loginPersonalForm").addEventListener("submit", function(e) {  
+document.getElementById("formPersonal").addEventListener("submit", function (e) {
   e.preventDefault(); // Previne o comportamento padrão do formulário  
 
-  const personalPassword = document.getElementById("personalPassword").value;  
-  const personalEmail = document.getElementById("personalEmail").value;
-  const personalCref = document.getElementById("personalCref").value;  
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const cref = document.getElementById("cref").value;
 
   // Enviar os dados para a API  
-  fetch('http://localhost:3000/usuarioPersonal', {  
-      method: 'POST',  
-      headers: {  
-          'Content-Type': 'application/json'  
-      },  
-      body: JSON.stringify({ personalPassword, personalEmail, personalCref })  
-  })  
-  .then(response => response.json())  
-  .then(data => {  
-      console.log('Sucesso:', data);  
-      alert('Usuário cadastrado com sucesso! ID: ' + data.id);  
-  })  
-  .catch((error) => {  
-      console.error('Erro:', error);  
-  });  
+  fetch('http://localhost:3000/usuarioPersonal', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ nome, email, password, cref })
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Sucesso:', data);
+      alert('Usuário cadastrado com sucesso! ID: ' + data.id);
+      window.location.href = "dashboardPersonal.html";
+    })
+    .catch((error) => {
+      console.error('Erro:', error);
+    });
 });
+
+document.getElementById("formCadastroAluno").addEventListener("submit", function (e) {
+  e.preventDefault(); // Previne o comportamento padrão do formulário  
+
+  const nomeAluno = document.getElementById("nomeAluno").value;
+  const generoAluno = document.getElementById("generoAluno").value;
+  const alunoNascimento = document.getElementById("alunoNascimento").value;
+  const alunoPeso = document.getElementById("alunoPeso").value;
+  const alunoAltura = document.getElementById("alunoAltura").value;
+  const alunoLogin = document.getElementById("alunoLogin").value;
+  const alunoSenha = document.getElementById("alunoSenha").value;
+
+  // Enviar os dados para a API  
+  fetch('http://localhost:3000/cadastroAluno', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ nomeAluno, generoAluno, alunoNascimento, alunoPeso, alunoAltura, alunoLogin, alunoSenha})
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Sucesso:', data);
+      alert('Aluno cadastrado com sucesso! ID: ' + data.id);
+      window.location.href = "dashboardPersonal.html";
+    })
+    .catch((error) => {
+      console.error('Erro:', error);
+    });
+});
+
 
 
 function handlePersonalLogin(event) {
@@ -40,10 +73,10 @@ function handlePersonalLogin(event) {
 function handleAlunoLogin(event) {
   event.preventDefault();
 
-  const email = document.getElementById("aluno-email").value;
-  const password = document.getElementById("aluno-password").value;
+  const alunoEmail = document.getElementById("alunoEmail").value;
+  const alunoPassword = document.getElementById("alunoPassword").value;
 
-  if (email && password) {
+  if (alunoEmail && alunoPassword) {
     alert("Login realizado com sucesso !");
     window.location.href = "dashboard-aluno.html";
   } else {
@@ -62,7 +95,7 @@ function handleCadastroTreino(event) {
   const gifInput = document.getElementById("gifInput").files[0];
 
   if (!alunoSelecionado && grupoMuscular && series && repeticoes && observacoes && gifInput) {
-      alert("Por favor, preencha todos os campos.");
+    alert("Por favor, preencha todos os campos.");
   }
 
   // Aqui você pode implementar a lógica de salvar o treino para o aluno selecionado
@@ -95,19 +128,19 @@ function handleCadastroTreino(event) {
 
 
 function showCadastroAluno() {
-  window.location.href = 'cadastro-aluno.html';
+  window.location.href = 'cadastroAluno.html';
 }
 
 function showCadastroTreino() {
-  window.location.href = 'cadastro-treino.html';
+  window.location.href = 'cadastroTreino.html';
 }
 
 function voltarDashboardPersonal() {
-  window.location.href = 'dashboard-personal.html';
+  window.location.href = 'dashboardPersonal.html';
 }
 
 function voltarDashboardAluno() {
-  window.location.href = 'dashboard-aluno.html';
+  window.location.href = 'dashboardAluno.html';
 }
 
 function exit() {

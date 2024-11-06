@@ -9,12 +9,16 @@
 </head>
 
 <body>
-  <div class="cadastro">
+  <div class="login">
     <h1>Cadastro do Aluno</h1>
 
-    <form id="formCadastro" onsubmit="handleCadastroAluno(event)">
+    <form id="formCadastroAluno"><!-- onsubmit="handleCadastroAluno(event)" -->
+
+      <label for="aluno-nome">Nome</label>
+      <input type="text" id="nomeAluno" placeholder="Nome" required>
+
       <label for="aluno-genero">Gênero</label>
-      <select id="aluno-genero" required>
+      <select id="generoAluno" required>
         <option value="">Escolha o gênero</option>
         <option value="homem">Homem</option>
         <option value="mulher">Mulher</option>
@@ -22,19 +26,19 @@
       </select>
 
       <label for="aluno-data-nasc">Data de Nascimento</label>
-      <input type="date" id="aluno-data-nasc" required>
+      <input type="date" id="alunoNascimento" required>
 
       <label for="aluno-peso">Peso</label>
-      <input type="number" id="aluno-peso" placeholder="Peso" required>
+      <input type="number" id="alunoPeso" placeholder="Peso" required>
 
       <label for="aluno-altura">Altura</label>
-      <input type="number" id="aluno-altura" placeholder="Altura" required>
+      <input type="number" id="alunoAltura" placeholder="Altura" required>
 
       <label for="aluno-login">Login</label>
-      <input type="text" id="aluno-login" placeholder="Login" required>
+      <input type="text" id="alunoLogin" placeholder="Login" required>
 
       <label for="aluno-senha">Senha</label>
-      <input type="password" id="aluno-senha" placeholder="Senha" required>
+      <input type="password" id="alunoSenha" placeholder="Senha" required>
 
       <button type="submit">Cadastrar</button>
       <button type="button" onclick="voltarDashboardPersonal()">Voltar ao Dashboard</button>
