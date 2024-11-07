@@ -1,28 +1,31 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Personal</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login do Personal</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div class="login">
-        <h1>Login do Personal</h1>
-        <form id="formPersonal">
-            <input type="text" id="nome" placeholder="Nome" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Senha" required>
-            <input type="text" id="cref" placeholder="CREF" required>
-            <div class="button-container">
-                <button type="submit">Login</button>
-                <button type="button" onclick="exit()">Voltar</button>
-            </div>
-        </form>
-    </div>
-    <script src="scripts.js"></script>
+  <div class="login">
+    <h1>Login do Personal</h1>
+    <form id="formLoginPersonal">
+      <input type="email" id="emailPersonal" placeholder="Email" required>
+      <input type="password" id="passwordPersonal" placeholder="Senha" required>
+      <div class="button-container">
+          <button type="submit">Login</button>
+          <button type="button" onclick="exit()">Voltar</button>
+      </div>
+      <div>
+          <p>Ainda não tem cadastro?</p>
+          <button type="button" onclick="showCadastroPersonal()">Cadastre-se</button>
+      </div>
+  </form>
+  
+</div>
+  <script src="scripts.js"></script>
 </body>
 
 </html>

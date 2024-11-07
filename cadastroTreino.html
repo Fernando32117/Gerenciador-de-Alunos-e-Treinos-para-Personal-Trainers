@@ -10,15 +10,15 @@
 </head>
 
 <body>
-  <div class="cadastro">
+  <div class="login">
 
-    <form id="formCadastro" onsubmit="handleCadastroTreino(event)">
+    <form id="formCadastroTreinoAluno" onsubmit="handleCadastroTreino(event)">
+
       <label for="aluno">Buscar Aluno</label>
       <input type="text" id="aluno" oninput="buscarAluno(event)" placeholder="Digite o nome do aluno" required>
-      <!-- <div id="lista-alunos" class="lista-alunos" style="display:none;"></div> -->
 
-      <label for="grupo-muscular">Grupo Muscular</label>
-      <select id="grupo-muscular" required>
+      <label for="grupoMuscular">Grupo Muscular</label>
+      <select id="grupoMuscular" required>
         <option value=""></option>
         <option value="peito">Peito</option>
         <option value="perna">Perna</option>
