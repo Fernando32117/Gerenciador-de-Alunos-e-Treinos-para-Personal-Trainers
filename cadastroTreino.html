@@ -12,10 +12,10 @@
 <body>
   <div class="login">
 
-  <form id="formCadastroTreinoAluno" onsubmit="handleCadastroTreino(event)">
+  <form id="formCadastroTreinoAluno">
 
       <label for="aluno">Buscar Aluno</label>
-      <input type="text" id="aluno" oninput="buscarAluno(event)" placeholder="Digite o nome do aluno" required>
+      <input type="text" id="aluno" placeholder="Digite o nome do aluno" required>
 
       <label for="grupoMuscular">Grupo Muscular</label>
       <select id="grupoMuscular" required>
@@ -46,6 +46,70 @@
   </div>
 
   <script>
+    document.getElementById("formCadastroTreinoAluno").addEventListener("submit", function(event) {
+      event.preventDefault();
+  
+      // Dados do formulário
+      const nomeAluno = document.getElementById("aluno").value;
+      const grupoMuscular = document.getElementById("grupoMuscular").value;
+      const series = document.getElementById("series").value;
+      const repeticoes = document.getElementById("repeticoes").value;
+      const observacoes = document.getElementById("observacoes").value;
+  
+      // Verificar e preparar o arquivo GIF
+      const gifInput = document.getElementById('gifInput');
+      const preview = document.getElementById('preview');
+      // const gifFile = document.getElementById("gifInput").files[0];
+      const formData = new FormData();
+
+      formData.append("nomeAluno", nomeAluno);
+      formData.append("grupoMuscular", grupoMuscular);
+      formData.append("series", series);
+      formData.append("repeticoes", repeticoes);
+      formData.append("observacoes", observacoes);
+  
+      gifInput.addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file && file.type === 'image/gif') {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block'; // Exibe a imagem  
+        }
+
+        reader.readAsDataURL(file);
+      } else {
+        alert('Por favor, selecione um arquivo GIF válido.');
+        preview.style.display = 'none'; // Oculta a imagem se não for um GIF  
+      }
+    });
+  
+      // Enviar os dados para o servidor
+      fetch("http://localhost:3000/cadastrarTreino", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert("Treino cadastrado com sucesso!");
+          // Redirecionar ou limpar o formulário, se necessário
+          document.getElementById("formCadastroTreinoAluno").reset();
+          document.getElementById("preview").style.display = 'none';
+        } else {
+          alert("Erro ao cadastrar treino: " + data.message);
+        }
+      })
+      .catch(error => {
+        console.error("Erro:", error);
+        alert("Erro ao cadastrar treino. Tente novamente.");
+      });
+    });
+  </script>
+  
+
+  <!-- <script>
     const gifInput = document.getElementById('gifInput');
     const preview = document.getElementById('preview');
 
@@ -65,7 +129,7 @@
         preview.style.display = 'none'; // Oculta a imagem se não for um GIF  
       }
     });
-  </script>
+  </script> -->
 </body>
 
 </html>

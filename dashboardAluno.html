@@ -7,17 +7,33 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="dashboard">  
-    <header>  
-        <div class="name">Nome do Aluno</div>  
-        <div class="notificacao-aluno"><span>🔔</span></div>  
-    </header>  
-    <div class="button-container">  
-        <button type="button" onclick="treino()">Treinos</button>  
-        <button type="button" onclick="mensagem()">Enviar Mensagem</button>  
-        <button type="button" onclick="exit()">Sair</button>  
-    </div>  
-</div>
+  <div class="dashboard">
+    <header>
+      <div class="notification-icon"><span>🏋️‍♀️</span></div>
+      <div class="name" id="alunoName"></div>
+      <div class="notification-icon"><span>🏋️</span></div>
+    </header>
+    <div class="button-container">
+      <button type="button" onclick="treino()">Treinos</button>
+      <button type="button" onclick="mensagem()">Enviar Mensagem</button>
+      <button type="button" onclick="logout()">Sair</button> <!-- Chama a função logout -->
+    </div>
+  </div>
+  <script>
+    // Recupera o nome do aluno do localStorage 
+    const nomeAluno = localStorage.getItem('nomeAluno');
+    if (nomeAluno) {
+      // Exibe o nome do aluno na div correspondente 
+      document.getElementById('alunoName').innerText = nomeAluno;
+    }
+
+    // Função para fazer logout
+    function logout() {
+      localStorage.removeItem('nomeAluno');
+      window.location.href = "index.html";
+    }
+  </script>
   <script src="scripts.js"></script>
 </body>
+
 </html>

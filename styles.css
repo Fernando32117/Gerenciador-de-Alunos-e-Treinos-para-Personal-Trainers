@@ -212,3 +212,17 @@ button:hover {
       color: #555; /* Cor do texto */  
       margin: 5px 0; /* Margem entre os parágrafos */  
   }
+
+  .treino-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  
+  .treino-item {
+    background: #f3f3f3;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
