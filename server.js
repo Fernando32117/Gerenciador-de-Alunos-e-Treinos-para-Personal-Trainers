@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 db.run(`CREATE TABLE IF NOT EXISTS usuarioPersonal (  
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nomePersonal TEXT NOT NULL, 
-  emailPersonal TEXT NOT NULL,  
+  emailPersonal TEXT NOT NULL UNIQUE,  
   passwordPersonal TEXT NOT NULL,
   cref TEXT NOT NULL
 )`);
@@ -38,7 +38,7 @@ db.run(`CREATE TABLE IF NOT EXISTS usuarioAluno (
   alunoNascimento DATE NOT NULL,
   alunoPeso TEXT NOT NULL,
   alunoAltura TEXT NOT NULL,
-  alunoLogin TEXT NOT NULL,
+  alunoLogin TEXT NOT NULL UNIQUE,
   alunoSenha TEXT NOT NULL
 )`);
 
@@ -80,24 +80,27 @@ app.post('/usuarioPersonal', (req, res) => {
   });
 });
 
-// Criar uma rota POST para autenticação do personal trainer
+
+
+// Endpoint para autenticação de Personal
 app.post('/loginPersonal', (req, res) => {
   const { emailPersonal, passwordPersonal } = req.body;
 
-  const sql = `SELECT * FROM usuarioPersonal WHERE emailPersonal = ? AND passwordPersonal = ?`;
-  db.get(sql, [emailPersonal, passwordPersonal], (err, row) => {
+  db.get(`SELECT * FROM usuarioPersonal WHERE emailPersonal = ? AND passwordPersonal = ?`, [emailPersonal, passwordPersonal], (err, row) => {
     if (err) {
-      return res.status(500).json({ error: err.message });
+      return res.status(500).json({ message: 'Erro no servidor' });
     }
+
     if (row) {
-      // Usuário encontrado, autenticação bem-sucedida
-      res.json({ message: 'Login bem-sucedido', user: row });
+      res.json({ id: row.id, nomePersonal: row.nomePersonal });
     } else {
-      // Usuário não encontrado, autenticação falhou
-      res.status(401).json({ message: 'Credenciais inválidas' });
+      res.status(400).json({ message: 'Email ou senha incorretos' });
     }
   });
 });
+
+
+
 
 // Criar uma rota POST para o cadastro do aluno
 app.post('/usuarioAluno', (req, res) => {

@@ -11,21 +11,16 @@
 <body>
   <div class="login">
     <h1>Login do Personal</h1>
-    <form id="formLoginPersonal">
-      <input type="email" id="emailPersonal" placeholder="Email" required>
-      <input type="password" id="passwordPersonal" placeholder="Senha" required>
-      <div class="button-container">
-          <button type="submit">Login</button>
-          <button type="button" onclick="exit()">Voltar</button>
-      </div>
+    <form id="formLoginPersonal"> <input type="email" id="emailPersonal" placeholder="Email" required> <input
+        type="password" id="passwordPersonal" placeholder="Senha" required>
+      <div class="button-container"> <button type="submit">Login</button> <button type="button"
+        onclick="window.location.href='index.html'">Voltar</button> </div>
       <div>
-          <p>Ainda não tem cadastro?</p>
-          <button type="button" onclick="showCadastroPersonal()">Cadastre-se</button>
+        <p>Ainda não tem cadastro?</p> <button type="button" onclick="showCadastroPersonal()">Cadastre-se</button>
       </div>
-  </form>
-  
-</div>
+    </form>
+  </div>
   <script src="scripts.js"></script>
+  <script src="scripts.js" defer></script>
 </body>
-
 </html>

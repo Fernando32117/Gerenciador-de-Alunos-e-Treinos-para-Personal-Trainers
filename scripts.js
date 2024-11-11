@@ -1,127 +1,170 @@
-document.getElementById("formCadastroPersonal").addEventListener("submit", function (e) {
-  e.preventDefault(); // Previne o comportamento padrão do formulário  
 
-  const nomePersonal = document.getElementById("nomePersonal").value;
-  const emailPersonal = document.getElementById("emailPersonal").value;
-  const passwordPersonal = document.getElementById("passwordPersonal").value;
-  const cref = document.getElementById("cref").value;
+// window.onload = function () {
+//   // Verifica se o formulário de cadastro de personal está presente no DOM
+//   const formCadastroPersonal = document.getElementById("formCadastroPersonal");
+  
+//   if (formCadastroPersonal) {
+//     formCadastroPersonal.addEventListener("submit", function (e) {
+//       e.preventDefault();
 
-  // Enviar os dados para a API  
-  fetch('http://localhost:3000/usuarioPersonal', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ nomePersonal, emailPersonal, passwordPersonal, cref })
-  })
-    .then(response => {
-      if (!response.ok) {
-        return response.json().then(error => { throw new Error(error.message); });
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Sucesso:', data);
-      alert('Personal cadastrado com sucesso! ID: ' + data.id);
-      window.location.href = "dashboardPersonal.html";
-    })
-    .catch((error) => {
-      console.error('Erro:', error);
-      alert('Usuário com ' + error.message);
-    });
-});
+//       const nomePersonal = document.getElementById("nomePersonal").value;
+//       const emailPersonal = document.getElementById("emailPersonal").value;
+//       const passwordPersonal = document.getElementById("passwordPersonal").value;
+//       const cref = document.getElementById("cref").value;
 
+//       fetch('http://localhost:3000/usuarioPersonal', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({ nomePersonal, emailPersonal, passwordPersonal, cref })
+//       })
+//       .then(response => {
+//         if (!response.ok) {
+//           return response.json().then(error => { throw new Error(error.message); });
+//         }
+//         return response.json();
+//       })
+//       .then(data => {
+//         alert('Personal cadastrado com sucesso! ID: ' + data.id);
+//         window.location.href = "dashboardPersonal.html";
+//       })
+//       .catch((error) => {
+//         alert('Erro no cadastro: ' + error.message);
+//       });
+//     });
+//   }
 
-document.getElementById("formLoginPersonal").addEventListener("submit", function (e) {
-  e.preventDefault(); // Previne o comportamento padrão do formulário
+//   // Verifica se o formulário de login do personal está presente no DOM
+//     const formLoginPersonal = document.getElementById("formLoginPersonal");
+    
+//     if (formLoginPersonal) {
+//       formLoginPersonal.addEventListener("submit", function (e) {
+//         e.preventDefault();
+  
+//         const emailPersonal = document.getElementById("emailPersonal").value;
+//         const passwordPersonal = document.getElementById("passwordPersonal").value;
+  
+//         fetch('http://localhost:3000/loginPersonal', {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json'
+//           },
+//           body: JSON.stringify({ emailPersonal, passwordPersonal })
+//         })
+//         .then(response => {
+//           if (!response.ok) {
+//             return response.json().then(error => { throw new Error(error.message); });
+//           }
+//           return response.json();
+//         })
+//         .then(data => {
+//           alert('Login realizado com sucesso! Bem-vindo(a), ' + data.nomePersonal);
+  
+//           // Armazena o nome do personal no localStorage
+//           localStorage.setItem('nomePersonal', data.nomePersonal);
+  
+//           window.location.href = "dashboardPersonal.html";
+//         })
+//         .catch((error) => {
+//           alert('Erro no login: ' + error.message);
+//         });
+//       });
+//     }
+//   };
 
-  const emailPersonal = document.getElementById("emailPersonal").value;
-  const passwordPersonal = document.getElementById("passwordPersonal").value;
+window.onload = function () {
+  // Função para limpar o localStorage ao fazer logout
+  function logout() {
+    localStorage.removeItem('nomePersonal');
+    window.location.href = "loginPersonal.html";
+  }
 
-  // Enviar os dados para a API de login
-  fetch('http://localhost:3000/loginPersonal', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ emailPersonal, passwordPersonal })
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.message === 'Login bem-sucedido') {
-        console.log('Sucesso:', data);
-        alert('Login bem-sucedido! Bem-vindo, ' + data.user.nomePersonal);
+  // Adiciona a função de logout ao botão de sair
+  const exitButtons = document.querySelectorAll('button[onclick="exit()"]');
+  exitButtons.forEach(button => button.addEventListener('click', logout));
+
+  // Verifica se o formulário de login do personal está presente no DOM
+  const formLoginPersonal = document.getElementById("formLoginPersonal");
+
+  if (formLoginPersonal) {
+    formLoginPersonal.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const emailPersonal = document.getElementById("emailPersonal").value;
+      const passwordPersonal = document.getElementById("passwordPersonal").value;
+
+      fetch('http://localhost:3000/loginPersonal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ emailPersonal, passwordPersonal })
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(error => { throw new Error(error.message); });
+        }
+        return response.json();
+      })
+      .then(data => {
+        alert('Login realizado com sucesso! Bem-vindo(a), ' + data.nomePersonal);
+
+        // Armazena o nome do personal no localStorage
+        localStorage.setItem('nomePersonal', data.nomePersonal);
+
         window.location.href = "dashboardPersonal.html";
-      } else {
-        alert('Erro: ' + data.message);
-      }
-    })
-    .catch((error) => {
-      console.error('Erro:', error);
+      })
+      .catch((error) => {
+        alert('Erro no login: ' + error.message);
+      });
     });
-});
+  }
 
+  // Verifica se o formulário de cadastro de personal está presente no DOM
+  const formCadastroPersonal = document.getElementById("formCadastroPersonal");
 
+  if (formCadastroPersonal) {
+    formCadastroPersonal.addEventListener("submit", function (e) {
+      e.preventDefault();
 
+      const nomePersonal = document.getElementById("nomePersonal").value;
+      const emailPersonal = document.getElementById("emailPersonal").value;
+      const passwordPersonal = document.getElementById("passwordPersonal").value;
+      const cref = document.getElementById("cref").value;
 
-document.getElementById("formCadastroAluno").addEventListener("submit", function (e) {
-  e.preventDefault(); // Previne o comportamento padrão do formulário
+      fetch('http://localhost:3000/usuarioPersonal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ nomePersonal, emailPersonal, passwordPersonal, cref })
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(error => { throw new Error(error.message); });
+        }
+        return response.json();
+      })
+      .then(data => {
+        alert('Personal cadastrado com sucesso! ID: ' + data.id);
 
-  const nomeAluno = document.getElementById("nomeAluno").value;
-  const generoAluno = document.getElementById("generoAluno").value;
-  const alunoNascimento = document.getElementById("alunoNascimento").value;
-  const alunoPeso = document.getElementById("alunoPeso").value;
-  const alunoAltura = document.getElementById("alunoAltura").value;
-  const alunoLogin = document.getElementById("alunoLogin").value;
-  const alunoPassword = document.getElementById("alunoPassword").value;
+        // Armazena o nome do personal no localStorage
+        localStorage.setItem('nomePersonal', nomePersonal);
 
-  // Enviar os dados para a API
-  fetch('http://localhost:3000/usuarioAluno', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ nomeAluno, generoAluno, alunoNascimento, alunoPeso, alunoAltura, alunoLogin, alunoPassword })
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Sucesso:', data);
-      alert('Aluno cadastrado com sucesso! ID: ' + data.id);
-      window.location.href = "dashboardPersonal.html";
-    })
-    .catch((error) => {
-      console.error('Erro:', error);
+        window.location.href = "dashboardPersonal.html";
+      })
+      .catch((error) => {
+        alert('Erro no cadastro: ' + error.message);
+      });
     });
-});
+  }
+};
 
-document.getElementById("formLoginAluno").addEventListener("submit", function (e) {
-  e.preventDefault(); // Previne o comportamento padrão do formulário
 
-  const alunoLogin = document.getElementById("alunoLogin").value;
-  const alunoPassword = document.getElementById("alunoPassword").value;
 
-  // Enviar os dados para a API de login
-  fetch('http://localhost:3000/loginAluno', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ alunoLogin, alunoPassword })
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.message === 'Login bem-sucedido') {
-        console.log('Sucesso:', data);
-        alert('Login bem-sucedido! Bem-vindo, ' + data.user.nomeAluno);
-        window.location.href = "dashboardAluno.html";
-      } else {
-        alert('Erro: ' + data.message);
-      }
-    })
-    .catch((error) => {
-      console.error('Erro:', error);
-    });
-});
+
+
 
 
 
