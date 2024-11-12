@@ -7,6 +7,45 @@
   <link rel="stylesheet" href="styles.css">
   <script src="scripts.js"></script>
 </head>
+
+<body>
+  <div class="treinos">
+    <h1>Treinos</h1>
+    <div id="treinosContainer"></div>
+    <button type="button" onclick="voltarDashboardAluno()">Voltar ao Dashboard</button>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const nomeAluno = localStorage.getItem('nomeAluno');
+      fetch(`http://localhost:3000/treinosAluno?nomeAluno=${nomeAluno}`)
+      .then(response => response.json())
+      .then(data => {
+        const treinosContainer = document.getElementById('treinosContainer');
+        data.forEach(treino => {
+          const treinoDiv = document.createElement('div');
+          treinoDiv.innerHTML = `
+            <h3>${treino.grupoMuscular}</h3>
+            <p>Séries: ${treino.series}</p>
+            <p>Repetições: ${treino.repeticoes}</p>
+            <p>Observações: ${treino.observacoes}</p>
+            <img src="data:image/gif;base64,${treino.gif}" alt="Exemplo do Exercício">
+          `;
+          treinosContainer.appendChild(treinoDiv);
+        });
+      })
+      .catch((error) => {
+        alert('Erro ao carregar treinos: ' + error.message);
+      });
+    });
+
+    function voltarDashboardAluno() {
+      window.location.href = 'dashboardAluno.html';
+    }
+  </script>
+  <script src="scripts.js"></script>
+</html>
+
+<!-- 
 <body>
 <div class="treino-criado">  
   <h1>Treinos do Aluno</h1>
@@ -43,4 +82,4 @@
     renderizarTreinos();  
 </script>  
 </body>
-</html>
+-->

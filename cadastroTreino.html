@@ -11,11 +11,9 @@
 
 <body>
   <div class="login">
-
-  <form id="formCadastroTreinoAluno">
-
+    <form id="formCadastroTreinoAluno" onsubmit="handleCadastroTreino(event)">
       <label for="aluno">Buscar Aluno</label>
-      <input type="text" id="aluno" placeholder="Digite o nome do aluno" required>
+      <input type="text" id="aluno" oninput="buscarAluno(event)" placeholder="Digite o nome do aluno" required>
 
       <label for="grupoMuscular">Grupo Muscular</label>
       <select id="grupoMuscular" required>
@@ -42,74 +40,9 @@
 
       <button type="submit">Cadastrar Treino</button>
       <button type="button" onclick="voltarDashboardPersonal()">Voltar ao Dashboard</button>
-  </form>
+    </form>
   </div>
-
   <script>
-    document.getElementById("formCadastroTreinoAluno").addEventListener("submit", function(event) {
-      event.preventDefault();
-  
-      // Dados do formulário
-      const nomeAluno = document.getElementById("aluno").value;
-      const grupoMuscular = document.getElementById("grupoMuscular").value;
-      const series = document.getElementById("series").value;
-      const repeticoes = document.getElementById("repeticoes").value;
-      const observacoes = document.getElementById("observacoes").value;
-  
-      // Verificar e preparar o arquivo GIF
-      const gifInput = document.getElementById('gifInput');
-      const preview = document.getElementById('preview');
-      // const gifFile = document.getElementById("gifInput").files[0];
-      const formData = new FormData();
-
-      formData.append("nomeAluno", nomeAluno);
-      formData.append("grupoMuscular", grupoMuscular);
-      formData.append("series", series);
-      formData.append("repeticoes", repeticoes);
-      formData.append("observacoes", observacoes);
-  
-      gifInput.addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      if (file && file.type === 'image/gif') {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-          preview.src = e.target.result;
-          preview.style.display = 'block'; // Exibe a imagem  
-        }
-
-        reader.readAsDataURL(file);
-      } else {
-        alert('Por favor, selecione um arquivo GIF válido.');
-        preview.style.display = 'none'; // Oculta a imagem se não for um GIF  
-      }
-    });
-  
-      // Enviar os dados para o servidor
-      fetch("http://localhost:3000/cadastrarTreino", {
-        method: "POST",
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert("Treino cadastrado com sucesso!");
-          // Redirecionar ou limpar o formulário, se necessário
-          document.getElementById("formCadastroTreinoAluno").reset();
-          document.getElementById("preview").style.display = 'none';
-        } else {
-          alert("Erro ao cadastrar treino: " + data.message);
-        }
-      })
-      .catch(error => {
-        console.error("Erro:", error);
-        alert("Erro ao cadastrar treino. Tente novamente.");
-      });
-    });
-  </script>
-  
-
-  <!-- <script>
     const gifInput = document.getElementById('gifInput');
     const preview = document.getElementById('preview');
 
@@ -129,7 +62,45 @@
         preview.style.display = 'none'; // Oculta a imagem se não for um GIF  
       }
     });
-  </script> -->
+
+    // Função para lidar com a submissão do formulário de cadastro de treino
+    function handleCadastroTreino(event) {
+      event.preventDefault();
+
+      const aluno = document.getElementById('aluno').value;
+      const grupoMuscular = document.getElementById('grupoMuscular').value;
+      const series = document.getElementById('series').value;
+      const repeticoes = document.getElementById('repeticoes').value;
+      const observacoes = document.getElementById('observacoes').value;
+      const gif = document.getElementById('gifInput').files[0];
+
+      const formData = new FormData();
+      formData.append('aluno', aluno);
+      formData.append('grupoMuscular', grupoMuscular);
+      formData.append('series', series);
+      formData.append('repeticoes', repeticoes);
+      formData.append('observacoes', observacoes);
+      formData.append('gif', gif);
+
+      fetch('http://localhost:3000/cadastroTreinoAluno', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(error => { throw new Error(error.message); });
+        }
+        return response.json();
+      })
+      .then(data => {
+        alert('Treino cadastrado com sucesso! : ' + grupoMuscular);
+      })
+      .catch((error) => {
+        alert('Erro no cadastro: ' + error.message);
+      });
+    }
+  </script>
 </body>
+
 
 </html>

@@ -3,7 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
-const upload = multer();
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Inicializar o banco de dados SQLite
 const db = new sqlite3.Database('./meu_banco.db', (err) => {
@@ -47,7 +47,7 @@ db.run(`CREATE TABLE IF NOT EXISTS usuarioAluno (
 // Criar tabela se não existir treinoAluno
 db.run(`CREATE TABLE IF NOT EXISTS treinoAluno ( 
   id INTEGER PRIMARY KEY AUTOINCREMENT, 
-  alunoId INTEGER NOT NULL, 
+  aluno INTEGER NOT NULL, 
   grupoMuscular TEXT NOT NULL, 
   series INTEGER NOT NULL, 
   repeticoes INTEGER NOT NULL, 
@@ -173,13 +173,13 @@ app.post('/cadastrarTreino', upload.single('gif'), (req, res) => {
 });
 
 // Rota para buscar treinos do aluno
-app.get('/treinosAluno/:alunoId', (req, res) => {
+app.get('/treinosAluno/:aluno', (req, res) => {
   const alunoId = req.params.alunoId;
 
   const sql = `
     SELECT grupoMuscular, series, repeticoes, observacoes, gif 
     FROM treinoAluno 
-    WHERE alunoId = ?
+    WHERE nomeAluno = ?
   `;
 
   db.all(sql, [alunoId], (err, rows) => {
@@ -189,6 +189,37 @@ app.get('/treinosAluno/:alunoId', (req, res) => {
     res.json(rows);
   });
 });
+
+
+
+
+
+app.post('/cadastroTreinoAluno', upload.single('gif'), (req, res) => {
+  const { aluno, grupoMuscular, series, repeticoes, observacoes } = req.body;
+  const gif = req.file.buffer;
+
+  // Pegue o ID do aluno do banco de dados baseado no nome (ou outra lógica que preferir)
+  const alunoIdSql = `SELECT nomeAluno FROM usuarioAluno WHERE nomeAluno = ?`;
+  db.get(alunoIdSql, [aluno], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!row) {
+      return res.status(400).json({ message: 'Aluno não encontrado' });
+    }
+
+    const alunoId = row.id;
+
+    const sql = `INSERT INTO treinoAluno (alunoId, grupoMuscular, series, repeticoes, observacoes, gif) VALUES (?, ?, ?, ?, ?, ?)`;
+    db.run(sql, [aluno, grupoMuscular, series, repeticoes, observacoes, gif], function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ id: this.lastID }); // Retorna o ID do novo registro
+    });
+  });
+});
+
 
 
 

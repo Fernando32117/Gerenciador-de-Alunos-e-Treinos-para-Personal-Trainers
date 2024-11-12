@@ -27,9 +27,10 @@ window.onload = function () {
         },
         body: JSON.stringify({ emailPersonal, passwordPersonal })
       })
-      .then(response => {
+      .then(async response => {
         if (!response.ok) {
-          return response.json().then(error => { throw new Error(error.message); });
+          const error = await response.json();
+          throw new Error(error.message);
         }
         return response.json();
       })
@@ -66,14 +67,15 @@ window.onload = function () {
         },
         body: JSON.stringify({ nomePersonal, emailPersonal, passwordPersonal, cref })
       })
-      .then(response => {
+      .then(async response => {
         if (!response.ok) {
-          return response.json().then(error => { throw new Error(error.message); });
+          const error = await response.json();
+          throw new Error(error.message);
         }
         return response.json();
       })
       .then(data => {
-        alert('Personal cadastrado com sucesso! ID: ' + data.id);
+        alert('Personal cadastrado com sucesso! : ' + data.nomePersonal);
 
         // Armazena o nome do personal no localStorage
         localStorage.setItem('nomePersonal', nomePersonal);
@@ -103,9 +105,10 @@ window.onload = function () {
         },
         body: JSON.stringify({ alunoLogin, alunoPassword })
       })
-      .then(response => {
+      .then(async response => {
         if (!response.ok) {
-          return response.json().then(error => { throw new Error(error.message); });
+          const error = await response.json();
+          throw new Error(error.message);
         }
         return response.json();
       })
@@ -145,14 +148,15 @@ window.onload = function () {
         },
         body: JSON.stringify({ nomeAluno, generoAluno, alunoNascimento, alunoPeso, alunoAltura, alunoLogin, alunoPassword })
       })
-      .then(response => {
+      .then(async response => {
         if (!response.ok) {
-          return response.json().then(error => { throw new Error(error.message); });
+          const error = await response.json();
+          throw new Error(error.message);
         }
         return response.json();
       })
       .then(data => {
-        alert('Aluno cadastrado com sucesso! : ' + nomeAluno);
+        alert('Aluno cadastrado com sucesso! : ' + data.nomeAluno);
         window.location.href = "dashboardPersonal.html"
       })
       .catch((error) => {
@@ -169,41 +173,41 @@ window.onload = function () {
 };
 
 
-function treino() {
-  const nomeAluno = localStorage.getItem('nomeAluno');
+// function treino() {
+//   const nomeAluno = localStorage.getItem('nomeAluno');
   
-  fetch(`http://localhost:3000/treinosAluno/${nomeAluno}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Erro ao buscar os treinos');
-      }
-      return response.json();
-    })
-    .then(treinos => {
-      const treinoContainer = document.createElement('div');
-      treinoContainer.classList.add('treino-list');
+//   fetch(`http://localhost:3000/treinosAluno/${nomeAluno}`)
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error('Erro ao buscar os treinos');
+//       }
+//       return response.json();
+//     })
+//     .then(treinos => {
+//       const treinoContainer = document.createElement('div');
+//       treinoContainer.classList.add('treino-list');
 
-      treinos.forEach(treino => {
-        const treinoItem = document.createElement('div');
-        treinoItem.classList.add('treino-item');
+//       treinos.forEach(treino => {
+//         const treinoItem = document.createElement('div');
+//         treinoItem.classList.add('treino-item');
 
-        treinoItem.innerHTML = `
-          <h4>${treino.grupoMuscular}</h4>
-          <p>Séries: ${treino.series}</p>
-          <p>Repetições: ${treino.repeticoes}</p>
-          <p>Observações: ${treino.observacoes || 'N/A'}</p>
-          ${treino.gif ? `<img src="data:image/gif;base64,${treino.gif}" alt="Exemplo">` : ''}
-        `;
+//         treinoItem.innerHTML = `
+//           <h4>${treino.grupoMuscular}</h4>
+//           <p>Séries: ${treino.series}</p>
+//           <p>Repetições: ${treino.repeticoes}</p>
+//           <p>Observações: ${treino.observacoes || 'N/A'}</p>
+//           ${treino.gif ? `<img src="data:image/gif;base64,${treino.gif}" alt="Exemplo">` : ''}
+//         `;
 
-        treinoContainer.appendChild(treinoItem);
-      });
+//         treinoContainer.appendChild(treinoItem);
+//       });
 
-      document.body.appendChild(treinoContainer);
-    })
-    .catch(error => {
-      alert(error.message);
-    });
-}
+//       document.body.appendChild(treinoContainer);
+//     })
+//     .catch(error => {
+//       alert(error.message);
+//     });
+// }
 
 
 
