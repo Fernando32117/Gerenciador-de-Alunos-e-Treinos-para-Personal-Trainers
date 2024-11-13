@@ -75,7 +75,7 @@ window.onload = function () {
         return response.json();
       })
       .then(data => {
-        alert('Personal cadastrado com sucesso! : ' + data.nomePersonal);
+        alert('Personal cadastrado com sucesso! : ' + nomePersonal);
 
         // Armazena o nome do personal no localStorage
         localStorage.setItem('nomePersonal', nomePersonal);
@@ -156,7 +156,7 @@ window.onload = function () {
         return response.json();
       })
       .then(data => {
-        alert('Aluno cadastrado com sucesso! : ' + data.nomeAluno);
+        alert('Aluno cadastrado com sucesso! : ' + nomeAluno);
         window.location.href = "dashboardPersonal.html"
       })
       .catch((error) => {
