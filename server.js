@@ -82,7 +82,7 @@ app.post('/usuarioPersonal', (req, res) => {
     }
   });
 });
-// Endpoint para autenticação de Personal
+// Rota para autenticação de Personal
 app.post('/loginPersonal', (req, res) => {
   const { emailPersonal, passwordPersonal } = req.body;
 
@@ -98,6 +98,20 @@ app.post('/loginPersonal', (req, res) => {
     }
   });
 });
+// Rota para exclusão de Personal
+app.post('/deletePersonal', (req, res) => {
+  const { emailPersonal } = req.body;
+  db.run(`DELETE FROM usuarioPersonal WHERE emailPersonal = ?`, [emailPersonal], function(err) {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    res.json({ message: 'Conta excluída com sucesso!' });
+  });
+});
+
+
+
+
 
 
 

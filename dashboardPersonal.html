@@ -17,10 +17,25 @@
       <button onclick="showCadastroAluno()">Cadastrar Aluno</button>
       <button onclick="showCadastroTreino()">Cadastrar Treino</button>
       <button>Alunos Ativos</button>
-      <button type="button" onclick="logout()">Sair</button> <!-- Chama a função logout -->
+      <button type="button" onclick="logout()">Sair</button>
+      <button type="button" onclick="showDeleteAccountForm()">Excluir Conta</button>
     </div>
   </div>
+
+  <!-- Formulário de confirmação de exclusão de conta -->
+  <div id="deleteAccountForm" style="display:none;">
+    <h2>Excluir Conta</h2>
+    <label for="emailConfirm">Digite seu email para confirmar:</label>
+    <input type="email" id="emailConfirm">
+    <button type="button" onclick="deleteAccount()">Confirmar Exclusão</button>
+  </div>
+
   <script>
+    // Função para exibir o formulário de confirmação de exclusão de conta
+    function showDeleteAccountForm() {
+      document.getElementById('deleteAccountForm').style.display = 'block';
+    }
+
     // Recupera o nome do personal do localStorage 
     const nomePersonal = localStorage.getItem('nomePersonal');
     if (nomePersonal) {
@@ -33,7 +48,43 @@
       localStorage.removeItem('nomePersonal');
       window.location.href = "index.html";
     }
+
+    // Função para excluir a conta do personal
+    function deleteAccount() {
+      const emailPersonal = document.getElementById('emailConfirm').value;
+      if (emailPersonal) {
+        fetch('http://localhost:3000/deletePersonal', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ emailPersonal })
+        })
+        .then(async response => {
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message);
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert('Conta excluída com sucesso!');
+
+          // Remove os dados do localStorage
+          localStorage.removeItem('nomePersonal');
+          localStorage.removeItem('emailPersonal');
+
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          alert('Erro ao excluir a conta: ' + error.message);
+        });
+      } else {
+        alert('Por favor, insira o seu email para confirmar a exclusão da conta.');
+      }
+    }
   </script>
   <script src="scripts.js"></script>
 </body>
+
 </html>
