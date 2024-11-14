@@ -182,47 +182,19 @@ window.onload = function () {
 
 
 
-// function treino() {
-//   const nomeAluno = localStorage.getItem('nomeAluno');
-  
-//   fetch(`http://localhost:3000/treinosAluno/${nomeAluno}`)
-//     .then(response => {
-//       if (!response.ok) {
-//         throw new Error('Erro ao buscar os treinos');
-//       }
-//       return response.json();
-//     })
-//     .then(treinos => {
-//       const treinoContainer = document.createElement('div');
-//       treinoContainer.classList.add('treino-list');
 
-//       treinos.forEach(treino => {
-//         const treinoItem = document.createElement('div');
-//         treinoItem.classList.add('treino-item');
+document.addEventListener('DOMContentLoaded', () => {  
+  const loginPersonalBtn = document.getElementById('loginPersonalBtn');  
+  const loginAlunoBtn = document.getElementById('loginAlunoBtn');  
 
-//         treinoItem.innerHTML = `
-//           <h4>${treino.grupoMuscular}</h4>
-//           <p>Séries: ${treino.series}</p>
-//           <p>Repetições: ${treino.repeticoes}</p>
-//           <p>Observações: ${treino.observacoes || 'N/A'}</p>
-//           ${treino.gif ? `<img src="data:image/gif;base64,${treino.gif}" alt="Exemplo">` : ''}
-//         `;
+  loginPersonalBtn.addEventListener('click', () => {  
+    window.location.href = 'loginPersonal.html';  
+  });  
 
-//         treinoContainer.appendChild(treinoItem);
-//       });
-
-//       document.body.appendChild(treinoContainer);
-//     })
-//     .catch(error => {
-//       alert(error.message);
-//     });
-// }
-
-
-
-
-
-
+  loginAlunoBtn.addEventListener('click', () => {  
+    window.location.href = 'loginAluno.html';  
+  });  
+});
 
 
 

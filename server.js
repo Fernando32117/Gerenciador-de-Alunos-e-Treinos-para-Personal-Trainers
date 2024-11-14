@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
+const path = require('path');
 
 // Inicializar o banco de dados SQLite
 const db = new sqlite3.Database('./meu_banco.db', (err) => {
@@ -21,6 +22,13 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+// Middleware para servir arquivos estáticos  
+app.use(express.static(path.join(__dirname)));  
+
+// Rota para a página inicial  
+app.get('/', (_req, res) => {  
+    res.sendFile(path.join(__dirname, 'index.html'));  
+});
 
 
 // Criar tabela se não existir usuarioPersonal
