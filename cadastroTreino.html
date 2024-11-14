@@ -25,62 +25,75 @@
         <option value="braco-antebraco">Braço/Antebraço</option>
       </select>
 
-      <label for="series">Séries</label>
-      <input type="number" id="series" placeholder="Séries" required>
-
-      <label for="repeticoes">Repetições</label>
-      <input type="number" id="repeticoes" placeholder="Repetições" required>
-
-      <label for="observacoes">Observações</label>
-      <input type="text" id="observacoes" placeholder="Observações">
-
-      <h3>Escolha o Exemplo do Exercício</h3>
-      <input type="file" id="gifInput" accept="image/gif" required>
-      <img id="preview" src="" alt="Preview do GIF" style="display:none;">
+      <div id="exercicioContainer">
+        <!-- Este botão adicionará novos campos de exercício -->
+        <button type="button" id="addExercicioBtn">Adicionar Exercício</button>
+      </div>
 
       <button type="submit">Cadastrar Treino</button>
       <button type="button" onclick="voltarDashboardPersonal()">Voltar ao Dashboard</button>
     </form>
   </div>
+
+  <template id="exercicioTemplate">
+    <div class="exercicio">
+      <label for="nomeExex">Nome do Exercício</label>
+      <input type="text" class="observacoes" placeholder="Observações">
+
+      <label for="series">Séries</label>
+      <input type="number" class="series" placeholder="Séries" required>
+      
+      <label for="repeticoes">Repetições</label>
+      <input type="number" class="repeticoes" placeholder="Repetições" required>
+      
+      <label for="observacoes">Observações</label>
+      <input type="text" class="observacoes" placeholder="Observações">
+      
+      <h3>Escolha o Exemplo do Exercício</h3>
+      <input type="file" class="gifInput" accept="image/gif" required>
+      <img class="preview" src="" alt="Preview do GIF" style="display:none;">
+    </div>
+  </template>
+
   <script>
-    const gifInput = document.getElementById('gifInput');
-    const preview = document.getElementById('preview');
+    const addExercicioBtn = document.getElementById('addExercicioBtn');
+    const exercicioContainer = document.getElementById('exercicioContainer');
+    const exercicioTemplate = document.getElementById('exercicioTemplate');
 
-    gifInput.addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      if (file && file.type === 'image/gif') {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-          preview.src = e.target.result;
-          preview.style.display = 'block'; // Exibe a imagem  
-        }
-
-        reader.readAsDataURL(file);
-      } else {
-        alert('Por favor, selecione um arquivo GIF válido.');
-        preview.style.display = 'none'; // Oculta a imagem se não for um GIF  
-      }
+    addExercicioBtn.addEventListener('click', function () {
+      const newExercicio = exercicioTemplate.content.cloneNode(true);
+      exercicioContainer.appendChild(newExercicio);
     });
 
-    // Função para lidar com a submissão do formulário de cadastro de treino
     function handleCadastroTreino(event) {
       event.preventDefault();
 
       const aluno = document.getElementById('aluno').value;
       const grupoMuscular = document.getElementById('grupoMuscular').value;
-      const series = document.getElementById('series').value;
-      const repeticoes = document.getElementById('repeticoes').value;
-      const observacoes = document.getElementById('observacoes').value;
-      const gif = document.getElementById('gifInput').files[0];
+      const series = document.querySelectorAll('.series');
+      const repeticoes = document.querySelectorAll('.repeticoes');
+      const observacoes = document.querySelectorAll('.observacoes');
+      const gifs = document.querySelectorAll('.gifInput');
 
       const formData = new FormData();
       formData.append('aluno', aluno);
       formData.append('grupoMuscular', grupoMuscular);
-      formData.append('series', series);
-      formData.append('repeticoes', repeticoes);
-      formData.append('observacoes', observacoes);
-      formData.append('gif', gif);
+
+      series.forEach((s, index) => {
+        formData.append(`series${index}`, s.value);
+      });
+
+      repeticoes.forEach((r, index) => {
+        formData.append(`repeticoes${index}`, r.value);
+      });
+
+      observacoes.forEach((o, index) => {
+        formData.append(`observacoes${index}`, o.value);
+      });
+
+      gifs.forEach((g, index) => {
+        formData.append(`gif${index}`, g.files[0]);
+      });
 
       fetch('http://localhost:3000/cadastroTreinoAluno', {
         method: 'POST',
@@ -101,6 +114,7 @@
     }
   </script>
 </body>
+
 
 
 </html>

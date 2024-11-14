@@ -155,57 +155,6 @@ app.post('/loginAluno', (req, res) => {
 });
 
 
-// Rota para cadastrar treino
-app.post('/cadastrarTreino', upload.single('gif'), (req, res) => {
-  const { nomeAluno, grupoMuscular, series, repeticoes, observacoes } = req.body;
-  const gif = req.file ? req.file.buffer : null; // Armazena o GIF em buffer de dados binários
-
-  // Busca o ID do aluno pelo nome
-  const sqlAluno = 'SELECT id FROM usuarioAluno WHERE nomeAluno = ?';
-  db.get(sqlAluno, [nomeAluno], (err, aluno) => {
-    if (err) {
-      return res.status(500).json({ success: false, message: "Erro ao buscar aluno." });
-    }
-    if (!aluno) {
-      return res.status(404).json({ success: false, message: "Aluno não encontrado." });
-    }
-
-    // Insere o treino no banco com o ID do aluno
-    const sqlTreino = `
-      INSERT INTO treinoAluno (alunoId, grupoMuscular, series, repeticoes, observacoes, gif)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `;
-    const params = [aluno.id, grupoMuscular, series, repeticoes, observacoes, gif];
-
-    db.run(sqlTreino, params, function (err) {
-      if (err) {
-        return res.status(500).json({ success: false, message: "Erro ao cadastrar treino." });
-      }
-      res.json({ success: true, message: "Treino cadastrado com sucesso!" });
-    });
-  });
-});
-
-// Rota para buscar treinos do aluno
-app.get('/treinosAluno/:aluno', (req, res) => {
-  const alunoId = req.params.alunoId;
-
-  const sql = `
-    SELECT grupoMuscular, series, repeticoes, observacoes, gif 
-    FROM treinoAluno 
-    WHERE nomeAluno = ?
-  `;
-
-  db.all(sql, [alunoId], (err, rows) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(rows);
-  });
-});
-
-
-
 
 
 app.post('/cadastroTreinoAluno', upload.single('gif'), (req, res) => {
@@ -232,6 +181,23 @@ app.post('/cadastroTreinoAluno', upload.single('gif'), (req, res) => {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Rota para editar cadastro Personal
 app.put('/usuarioPersonal/:id', (req, res) => {
   const { id } = req.params;
@@ -246,16 +212,6 @@ app.put('/usuarioPersonal/:id', (req, res) => {
     res.json({ message: 'Informações atualizadas com sucesso', changes: this.changes });
   });
 });
-
-
-
-
-
-
-
-
-
-
 
 
 

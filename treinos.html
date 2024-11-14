@@ -7,79 +7,39 @@
   <link rel="stylesheet" href="styles.css">
   <script src="scripts.js"></script>
 </head>
-
 <body>
-  <div class="treinos">
-    <h1>Treinos</h1>
-    <div id="treinosContainer"></div>
-    <button type="button" onclick="voltarDashboardAluno()">Voltar ao Dashboard</button>
+  <div class="treino-criado">  
+    <h1>Treinos do Aluno</h1>
+    <button type="button" onclick="voltarDashboardAluno()">Voltar ao Dashboard</button>   
+    <div id="treinos-lista"></div>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const nomeAluno = localStorage.getItem('nomeAluno');
-      fetch(`http://localhost:3000/treinosAluno?nomeAluno=${nomeAluno}`)
-      .then(response => response.json())
-      .then(data => {
-        const treinosContainer = document.getElementById('treinosContainer');
-        data.forEach(treino => {
-          const treinoDiv = document.createElement('div');
-          treinoDiv.innerHTML = `
-            <h3>${treino.grupoMuscular}</h3>
-            <p>Séries: ${treino.series}</p>
-            <p>Repetições: ${treino.repeticoes}</p>
-            <p>Observações: ${treino.observacoes}</p>
-            <img src="data:image/gif;base64,${treino.gif}" alt="Exemplo do Exercício">
-          `;
-          treinosContainer.appendChild(treinoDiv);
-        });
-      })
-      .catch((error) => {
-        alert('Erro ao carregar treinos: ' + error.message);
-      });
-    });
-
-    function voltarDashboardAluno() {
-      window.location.href = 'dashboardAluno.html';
-    }
-  </script>
-  <script src="scripts.js"></script>
-</html>
-
-<!-- 
-<body>
-<div class="treino-criado">  
-  <h1>Treinos do Aluno</h1>
-  <button type="button" onclick="voltarDashboardAluno()">Voltar ao Dashboard</button>   
-  <div id="treinos-lista"></div>
-</div>
-
-  <script>  
-    const treinos = [  
-        { nome: "Treino de Quadríceps", descricao: "Hipertrofia.", duracao: "1h45" },  
-        { nome: "Treino de Peito", descricao: "Hipertrofia.", duracao: "1h30" },  
-        { nome: "Treino de Costas", descricao: "Hipertrofia.", duracao: "1h30" },  
-        { nome: "Treino Braço", descricao: "Hipertrofia.", duracao: "1h30" },  
-        { nome: "Treino de Posterior", descricao: "Hipertrofia.", duracao: "1h30" },
-        { nome: "Treino Full Body", descricao: "Hipertrofia.", duracao: "1h45" }  
-    ];  
-
-    function renderizarTreinos() {  
-        const treinosLista = document.getElementById("treinos-lista");  
-        treinosLista.innerHTML = "";  
-
-        treinos.forEach(treino => {  
-            const treinoDiv = document.createElement("div");  
-            treinoDiv.className = "treino-item";  
-            treinoDiv.innerHTML = `  
-                <h2>${treino.nome}</h2>  
-                <p><strong>Descrição:</strong> ${treino.descricao}</p>  
-                <p><strong>Duração:</strong> ${treino.duracao}</p>  
-            `;  
-            treinosLista.appendChild(treinoDiv);  
-        });  
-    }  
-
-    renderizarTreinos();  
-</script>  
-</body>
--->
+  
+    <script>  
+      const treinos = [  
+          { nome: "Treino de Quadríceps", descricao: "Hipertrofia.", duracao: "1h45" },  
+          { nome: "Treino de Peito", descricao: "Hipertrofia.", duracao: "1h30" },  
+          { nome: "Treino de Costas", descricao: "Hipertrofia.", duracao: "1h30" },  
+          { nome: "Treino Braço", descricao: "Hipertrofia.", duracao: "1h30" },  
+          { nome: "Treino de Posterior", descricao: "Hipertrofia.", duracao: "1h30" },
+          { nome: "Treino Full Body", descricao: "Hipertrofia.", duracao: "1h45" }  
+      ];  
+  
+      function renderizarTreinos() {  
+          const treinosLista = document.getElementById("treinos-lista");  
+          treinosLista.innerHTML = "";  
+  
+          treinos.forEach(treino => {  
+              const treinoDiv = document.createElement("div");  
+              treinoDiv.className = "treino-item";  
+              treinoDiv.innerHTML = `  
+                  <h2>${treino.nome}</h2>  
+                  <p><strong>Descrição:</strong> ${treino.descricao}</p>  
+                  <p><strong>Duração:</strong> ${treino.duracao}</p>  
+              `;  
+              treinosLista.appendChild(treinoDiv);  
+          });  
+      }  
+  
+      renderizarTreinos();  
+  </script>  
+  </body>
