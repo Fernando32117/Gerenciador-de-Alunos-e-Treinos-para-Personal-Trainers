@@ -101,7 +101,7 @@ app.post('/loginPersonal', (req, res) => {
 // Rota para exclusão de Personal
 app.post('/deletePersonal', (req, res) => {
   const { emailPersonal } = req.body;
-  db.run(`DELETE FROM usuarioPersonal WHERE emailPersonal = ?`, [emailPersonal], function(err) {
+  db.run(`DELETE FROM usuarioPersonal WHERE emailPersonal = ?`, [emailPersonal], function (err) {
     if (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -177,7 +177,7 @@ app.post('/cadastrarTreino', upload.single('gif'), (req, res) => {
     `;
     const params = [aluno.id, grupoMuscular, series, repeticoes, observacoes, gif];
 
-    db.run(sqlTreino, params, function(err) {
+    db.run(sqlTreino, params, function (err) {
       if (err) {
         return res.status(500).json({ success: false, message: "Erro ao cadastrar treino." });
       }
@@ -221,9 +221,6 @@ app.post('/cadastroTreinoAluno', upload.single('gif'), (req, res) => {
     if (!row) {
       return res.status(400).json({ message: 'Aluno não encontrado' });
     }
-
-    const alunoId = row.id;
-
     const sql = `INSERT INTO treinoAluno (alunoId, grupoMuscular, series, repeticoes, observacoes, gif) VALUES (?, ?, ?, ?, ?, ?)`;
     db.run(sql, [aluno, grupoMuscular, series, repeticoes, observacoes, gif], function (err) {
       if (err) {
@@ -231,6 +228,22 @@ app.post('/cadastroTreinoAluno', upload.single('gif'), (req, res) => {
       }
       res.json({ id: this.lastID }); // Retorna o ID do novo registro
     });
+  });
+});
+
+
+// Rota para editar cadastro Personal
+app.put('/usuarioPersonal/:id', (req, res) => {
+  const { id } = req.params;
+  const { nomePersonal, emailPersonal, passwordPersonal, cref } = req.body;
+
+  const sql = `UPDATE usuarioPersonal SET nomePersonal = ?, emailPersonal = ?, passwordPersonal = ?, cref = ? WHERE id = ?`;
+
+  db.run(sql, [nomePersonal, emailPersonal, passwordPersonal, cref, id], function (err) {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    res.json({ message: 'Informações atualizadas com sucesso', changes: this.changes });
   });
 });
 

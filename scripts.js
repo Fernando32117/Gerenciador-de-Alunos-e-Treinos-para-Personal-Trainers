@@ -2,7 +2,9 @@ window.onload = function () {
   // Função para limpar o localStorage ao fazer logout
   function logout() {
     localStorage.removeItem('nomePersonal');
-    localStorage.removeItem('nomeAluno'); // Remover o nome do aluno também
+    localStorage.removeItem('emailPersonal');
+    localStorage.removeItem('crefPersonal');
+    localStorage.removeItem('userId');
     window.location.href = "loginPersonal.html";
   }
 
@@ -37,8 +39,11 @@ window.onload = function () {
       .then(data => {
         alert('Login realizado com sucesso! Bem-vindo(a), ' + data.nomePersonal);
 
-        // Armazena o nome do personal no localStorage
+        // Armazena os dados do personal no localStorage
+        localStorage.setItem('userId', data.id);
         localStorage.setItem('nomePersonal', data.nomePersonal);
+        localStorage.setItem('emailPersonal', data.emailPersonal);
+        localStorage.setItem('crefPersonal', data.cref);
 
         window.location.href = "dashboardPersonal.html";
       })
@@ -77,8 +82,11 @@ window.onload = function () {
       .then(data => {
         alert('Personal cadastrado com sucesso! : ' + nomePersonal);
 
-        // Armazena o nome do personal no localStorage
+        // Armazena os dados do personal no localStorage
+        localStorage.setItem('userId', data.id);
         localStorage.setItem('nomePersonal', nomePersonal);
+        localStorage.setItem('emailPersonal', emailPersonal);
+        localStorage.setItem('crefPersonal', cref);
 
         window.location.href = "dashboardPersonal.html";
       })
@@ -157,7 +165,7 @@ window.onload = function () {
       })
       .then(data => {
         alert('Aluno cadastrado com sucesso! : ' + nomeAluno);
-        window.location.href = "dashboardPersonal.html"
+        window.location.href = "dashboardPersonal.html";
       })
       .catch((error) => {
         alert('Erro no cadastro: ' + error.message);
@@ -171,6 +179,7 @@ window.onload = function () {
     document.getElementById('alunoName').innerText = nomeAluno;
   }
 };
+
 
 
 // function treino() {

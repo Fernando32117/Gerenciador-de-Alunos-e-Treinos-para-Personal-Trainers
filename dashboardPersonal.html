@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Personal</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
+
+
+
+
 <body>
   <div class="dashboard">
     <header>
@@ -19,6 +25,7 @@
       <button>Alunos Ativos</button>
       <button type="button" onclick="logout()">Sair</button>
       <button type="button" onclick="showDeleteAccountForm()">Excluir Conta</button>
+      <button type="button" onclick="showEditAccountForm()">Editar Conta</button>
     </div>
   </div>
 
@@ -30,23 +37,65 @@
     <button type="button" onclick="deleteAccount()">Confirmar Exclusão</button>
   </div>
 
+  <!-- Formulário de edição de conta -->
+  <div id="editAccountForm" style="display:none;">
+    <h2>Editar Conta</h2>
+    <label for="nomeEdit">Nome:</label>
+    <input type="text" id="nomeEdit">
+    <label for="emailEdit">Email:</label>
+    <input type="email" id="emailEdit">
+    <label for="passwordEdit">Senha:</label>
+    <input type="password" id="passwordEdit">
+    <label for="crefEdit">CREF:</label>
+    <input type="text" id="crefEdit">
+    <button type="button" onclick="updatePersonal(localStorage.getItem('userId'))">Salvar Alterações</button>
+  </div>
+
   <script>
-    // Função para exibir o formulário de confirmação de exclusão de conta
-    function showDeleteAccountForm() {
-      document.getElementById('deleteAccountForm').style.display = 'block';
+    // Função para preencher o formulário de edição com os dados atuais
+    function fillEditForm(nome, email, cref) {
+      document.getElementById('nomeEdit').value = nome;
+      document.getElementById('emailEdit').value = email;
+      document.getElementById('crefEdit').value = cref;
     }
 
-    // Recupera o nome do personal do localStorage 
-    const nomePersonal = localStorage.getItem('nomePersonal');
-    if (nomePersonal) {
-      // Exibe o nome do personal na div correspondente 
-      document.getElementById('personalName').innerText = nomePersonal;
+    // Função para alternar a visibilidade do formulário de edição de conta
+    function showEditAccountForm() {
+      const form = document.getElementById('editAccountForm');
+      if (form.style.display === 'none' || form.style.display === '') {
+        const nomePersonal = localStorage.getItem('nomePersonal');
+        const emailPersonal = localStorage.getItem('emailPersonal');
+        const crefPersonal = localStorage.getItem('crefPersonal');
+
+        if (nomePersonal && emailPersonal && crefPersonal) {
+          fillEditForm(nomePersonal, emailPersonal, crefPersonal);
+          form.style.display = 'block';
+        } else {
+          alert('Erro: dados do personal não encontrados.');
+        }
+      } else {
+        form.style.display = 'none';
+      }
     }
+
 
     // Função para fazer logout
     function logout() {
       localStorage.removeItem('nomePersonal');
+      localStorage.removeItem('emailPersonal');
+      localStorage.removeItem('crefPersonal');
+      localStorage.removeItem('userId');
       window.location.href = "index.html";
+    }
+
+    // Função para exibir o formulário de confirmação de exclusão de conta
+    function showDeleteAccountForm() {
+      const form = document.getElementById('deleteAccountForm');
+      if (form.style.display === 'none' || form.style.display === '') {
+        form.style.display = 'block';
+      } else {
+        form.style.display = 'none';
+      }
     }
 
     // Função para excluir a conta do personal
@@ -60,6 +109,46 @@
           },
           body: JSON.stringify({ emailPersonal })
         })
+          .then(async response => {
+            if (!response.ok) {
+              const error = await response.json();
+              throw new Error(error.message);
+            }
+            return response.json();
+          })
+          .then(data => {
+            alert('Conta excluída com sucesso!');
+
+            // Remove os dados do localStorage
+            localStorage.removeItem('nomePersonal');
+            localStorage.removeItem('emailPersonal');
+            localStorage.removeItem('crefPersonal');
+            localStorage.removeItem('userId');
+
+            window.location.href = "index.html";
+          })
+          .catch((error) => {
+            alert('Erro ao excluir a conta: ' + error.message);
+          });
+      } else {
+        alert('Por favor, insira o seu email para confirmar a exclusão da conta.');
+      }
+    }
+
+    // Função para atualizar as informações do personal
+    function updatePersonal(id) {
+      const nomePersonal = document.getElementById('nomeEdit').value;
+      const emailPersonal = document.getElementById('emailEdit').value;
+      const passwordPersonal = document.getElementById('passwordEdit').value;
+      const cref = document.getElementById('crefEdit').value;
+
+      fetch(`http://localhost:3000/usuarioPersonal/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ nomePersonal, emailPersonal, passwordPersonal, cref })
+      })
         .then(async response => {
           if (!response.ok) {
             const error = await response.json();
@@ -68,23 +157,37 @@
           return response.json();
         })
         .then(data => {
-          alert('Conta excluída com sucesso!');
+          alert('Informações atualizadas com sucesso: ' + data.message);
 
-          // Remove os dados do localStorage
-          localStorage.removeItem('nomePersonal');
-          localStorage.removeItem('emailPersonal');
+          // Atualiza os dados do personal no localStorage
+          localStorage.setItem('nomePersonal', nomePersonal);
+          localStorage.setItem('emailPersonal', emailPersonal);
+          localStorage.setItem('crefPersonal', cref);
 
-          window.location.href = "index.html";
+          // Redireciona para a página do dashboard
+          window.location.href = "dashboardPersonal.html";
         })
         .catch((error) => {
-          alert('Erro ao excluir a conta: ' + error.message);
+          alert('Erro ao atualizar as informações: ' + error.message);
         });
-      } else {
-        alert('Por favor, insira o seu email para confirmar a exclusão da conta.');
-      }
+    }
+
+    // Recupera o nome do personal do localStorage
+    const nomePersonal = localStorage.getItem('nomePersonal');
+    if (nomePersonal) {
+      document.getElementById('personalName').innerText = nomePersonal;
     }
   </script>
   <script src="scripts.js"></script>
 </body>
+
+
+
+
+
+
+
+
+
 
 </html>
