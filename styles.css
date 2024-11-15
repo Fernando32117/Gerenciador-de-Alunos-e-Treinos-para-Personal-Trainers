@@ -226,3 +226,42 @@ button:hover {
     border-radius: 5px;
   }
   
+  .aluno-item {
+    display: flex;
+    align-items:first baseline;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 2px;
+    margin-right: 30px;
+    background-color: #f9f9f9;
+  }
+
+  .aluno-item span {
+    flex: 1;
+  }
+
+  .aluno-info {
+    font-weight: 500;
+    margin-bottom: 15px;
+    /* Espaço entre as informações e os botões */
+  }
+
+  .aluno-item button {
+    margin-left: 5px;
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .btn-editar {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .btn-excluir {
+    background-color: #f44336;
+    color: white;
+  }

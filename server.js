@@ -119,7 +119,37 @@ app.post('/deletePersonal', (req, res) => {
 
 
 
+app.get('/api/alunos', (req, res) => {
+  db.all('SELECT * FROM usuarioAluno', [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({ alunos: rows });
+  });
+});
 
+// Rota para excluir um aluno pelo alunoLogin (email de login)
+app.delete('/api/alunos/:alunoLogin', (req, res) => {
+  const alunoLogin = req.params.alunoLogin;
+
+  // Comando SQL para excluir o aluno pelo alunoLogin
+  const sql = `DELETE FROM usuarioAluno WHERE alunoLogin = ?`;
+
+  db.run(sql, [alunoLogin], function (err) {
+    if (err) {
+      console.error('Erro ao excluir aluno:', err.message);
+      res.status(500).json({ error: 'Erro ao excluir aluno' });
+    } else {
+      // Verifica se algum registro foi deletado
+      if (this.changes > 0) {
+        res.json({ message: 'Aluno excluído com sucesso' });
+      } else {
+        res.status(404).json({ error: 'Aluno não encontrado' });
+      }
+    }
+  });
+});
 
 
 
@@ -145,6 +175,7 @@ app.post('/usuarioAluno', (req, res) => {
     }
   });
 });
+
 // Rota de login do aluno
 app.post('/loginAluno', (req, res) => {
   const { alunoLogin, alunoPassword } = req.body;
@@ -161,8 +192,6 @@ app.post('/loginAluno', (req, res) => {
     res.json({ nomeAluno: row.nomeAluno });
   });
 });
-
-
 
 
 app.post('/cadastroTreinoAluno', upload.single('gif'), (req, res) => {
@@ -187,22 +216,6 @@ app.post('/cadastroTreinoAluno', upload.single('gif'), (req, res) => {
     });
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

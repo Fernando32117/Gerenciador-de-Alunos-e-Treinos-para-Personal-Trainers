@@ -8,10 +8,6 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 
-
-
-
-
 <body>
   <div class="dashboard">
     <header>
@@ -22,12 +18,17 @@
     <div class="button-container">
       <button onclick="showCadastroAluno()">Cadastrar Aluno</button>
       <button onclick="showCadastroTreino()">Cadastrar Treino</button>
-      <button>Alunos Ativos</button>
+      <button onclick="listarAlunos()">Alunos Ativos</button>
       <button type="button" onclick="logout()">Sair</button>
       <button type="button" onclick="showDeleteAccountForm()">Excluir Conta</button>
       <button type="button" onclick="showEditAccountForm()">Editar Conta</button>
     </div>
+    <div id="lista-alunos" style="display: none;">
+      <h3>Alunos Cadastrados:</h3>
+      <ul id="alunos-list"></ul>
+    </div>
   </div>
+
 
   <!-- Formulário de confirmação de exclusão de conta -->
   <div id="deleteAccountForm" style="display:none;">
@@ -52,6 +53,85 @@
   </div>
 
   <script>
+
+    // Função para listar alunos com botões de ação
+    // Função para alternar a exibição da lista de alunos
+    function listarAlunos() {
+      const listaAlunosContainer = document.getElementById('lista-alunos');
+
+      if (listaAlunosContainer.style.display === 'block') {
+        listaAlunosContainer.style.display = 'none';
+      } else {
+        fetch('/api/alunos')
+          .then(response => response.json())
+          .then(data => {
+            const listaAlunos = document.getElementById('alunos-list');
+            listaAlunos.innerHTML = '';
+
+            data.alunos.forEach(aluno => {
+              const li = document.createElement('li');
+              li.className = 'aluno-item';
+
+              // Elemento para exibir informações do aluno
+              const alunoInfo = document.createElement('div');
+              alunoInfo.className = 'aluno-info';
+              alunoInfo.textContent = `Nome: ${aluno.nomeAluno} / E-mail: ${aluno.alunoLogin} / Nascimento: ${aluno.alunoNascimento}`;
+
+              // Container para os botões
+              const buttonContainer = document.createElement('div');
+              buttonContainer.className = 'button-container';
+
+              // Botão de Editar
+              const btnEditar = document.createElement('button');
+              btnEditar.textContent = 'Editar';
+              btnEditar.className = 'btn-editar';
+              btnEditar.onclick = () => editarAluno(aluno.id);
+
+              // Botão de Excluir
+              const btnExcluir = document.createElement('button');
+              btnExcluir.textContent = 'Excluir';
+              btnExcluir.className = 'btn-excluir';
+              btnExcluir.onclick = () => excluirAluno(aluno.alunoLogin);
+
+              // Adiciona os botões ao container de botões
+              buttonContainer.appendChild(btnEditar);
+              buttonContainer.appendChild(btnExcluir);
+
+              // Adiciona o info do aluno e os botões ao <li>
+              li.appendChild(alunoInfo);
+              li.appendChild(buttonContainer);
+
+              listaAlunos.appendChild(li);
+            });
+
+            listaAlunosContainer.style.display = 'block';
+          })
+          .catch(error => console.error('Erro ao buscar alunos:', error));
+      }
+    }
+
+
+    // Função para excluir aluno
+    function excluirAluno(alunoLogin) {
+      if (confirm('Tem certeza que deseja excluir este aluno?')) {
+        fetch(`/api/alunos/${alunoLogin}`, {
+          method: 'DELETE'
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.error) {
+              alert(data.error);
+            } else {
+              alert(data.message);
+              listarAlunos(); // Atualiza a lista após a exclusão
+            }
+          })
+          .catch(error => console.error('Erro ao excluir aluno:', error));
+      }
+    }
+
+
+
     // Função para preencher o formulário de edição com os dados atuais
     function fillEditForm(nome, email, cref) {
       document.getElementById('nomeEdit').value = nome;
