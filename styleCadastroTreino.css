@@ -1,0 +1,152 @@
+/* Reset padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Corpo da página */
+  body {
+    font-family: Arial, sans-serif;
+    background: url('personal.jpg') no-repeat center center/cover;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Container de login/formulário */
+  .login {
+    background: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    backdrop-filter: blur(8px); /* Desfoque no fundo */
+    border-radius: 20px;
+    padding: 30px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    color: #fff;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .login:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    transform: translateY(-5px); /* Movimento para cima */
+  }
+  
+  /* Estilo do formulário */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  form label {
+    font-size: 1rem;
+    color: #ffcc00;
+    margin-bottom: 5px;
+  }
+  
+  form input,
+  form select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1); /* Fundo semitransparente */
+    color: #e0a800;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  form input::placeholder {
+    color: #ccc;
+  }
+  
+  form input:hover,
+  form select:hover {
+    background: rgba(255, 255, 255, 0.2); /* Realce ao passar o mouse */
+    color: #e0a800;
+  }
+  
+  form button {
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    background-color: #e0a800;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  form button:hover {
+    background-color: #ffcc00;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px); /* Efeito de elevação */
+  }
+  
+  /* Estilo do botão de adicionar exercício */
+  #addExercicioBtn {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffcc00;
+    border: 1px solid #ffcc00;
+    transition: all 0.3s ease;
+  }
+  
+  #addExercicioBtn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    border: 1px solid white;
+  }
+  
+  /* Exemplo de exercício */
+  .exercicio {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+  }
+  
+  .exercicio:hover {
+    transform: scale(1.03); /* Leve zoom ao passar o mouse */
+    background: rgba(255, 255, 255, 0.2); /* Realce */
+  }
+  
+  /* Inputs dentro dos exercícios */
+  .exercicio input {
+    background: rgba(0, 0, 0, 0.5);
+    color: #ffcc00;
+  }
+  
+  .exercicio input:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+  
+  /* Pré-visualização de GIF */
+  .preview {
+    margin-top: 10px;
+    max-width: 100%;
+    border-radius: 10px;
+    border: 1px solid #ffcc00;
+  }
+  
+  /* Mensagens e estilos adicionais */
+  h3 {
+    color: #ffcc00;
+    font-size: 1.2rem;
+    margin-top: 15px;
+  }
+
+  /* Título */
+.login h2 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: #fff;
+  }
+  

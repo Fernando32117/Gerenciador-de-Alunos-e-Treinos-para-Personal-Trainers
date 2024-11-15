@@ -1,0 +1,140 @@
+/* Reset padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Corpo da página */
+  body {
+    font-family: Arial, sans-serif;
+    background: url('aluno.jpg') no-repeat center center/cover;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px); /* Desfoque do fundo */
+  }
+  
+  /* Container do Dashboard */
+  .dashboard {
+    background: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    backdrop-filter: blur(8px); /* Efeito de desfoque */
+    border-radius: 20px;
+    padding: 30px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    color: #fff;
+    text-align: center;
+    transition: transform 0.3s ease, opacity 1s ease;
+  }
+  
+  .dashboard:hover {
+    transform: scale(1.05); /* Efeito de zoom ao passar o mouse */
+    opacity: 1; /* Leve redução da opacidade para destaque */
+  }
+  
+  /* Cabeçalho */
+  .dashboard header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .notification-icon {
+    font-size: 1.5rem;
+  }
+  
+  #personalName {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  /* Container de botões */
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espaço entre os botões */
+  }
+  
+  .button-container button {
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    background-color: #e0a800;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .button-container button:hover {
+    background-color: #ffcc00;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px); /* Efeito de botão elevado */
+  }
+  
+  /* Listagem de alunos */
+  #lista-alunos {
+    margin-top: 20px;
+    display: none;
+  }
+  
+  #alunos-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #alunos-list li {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+  }
+  
+  /* Formulários de edição/exclusão */
+  #deleteAccountForm, #editAccountForm, #editAccountFormAluno {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    display: none;
+    transition: opacity 0.3s ease;
+    color: #ccc;
+    margin-left: 10px
+  }
+  
+  #deleteAccountForm input,
+  #editAccountForm input,
+  #editAccountFormAluno input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #333;
+    color: #fff;
+  }
+  
+  #deleteAccountForm button,
+  #editAccountForm button {
+    width: 100%;
+    padding: 12px;
+    background-color: #e0a800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #deleteAccountForm button:hover,
+  #editAccountForm button:hover {
+    background-color: #ffcc00;
+  }
+  
+  

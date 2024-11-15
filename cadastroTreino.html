@@ -5,12 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Treino</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styleCadastroTreino.css">
   <script src="scripts.js"></script>
 </head>
 
 <body>
   <div class="login">
+    <h2>Cadastro de Treinos</h2>
     <form id="formCadastroTreinoAluno" onsubmit="handleCadastroTreino(event)">
       <label for="aluno">Buscar Aluno</label>
       <input type="text" id="aluno" oninput="buscarAluno(event)" placeholder="Digite o nome do aluno" required>
@@ -42,13 +43,13 @@
 
       <label for="series">Séries</label>
       <input type="number" class="series" placeholder="Séries" required>
-      
+
       <label for="repeticoes">Repetições</label>
       <input type="number" class="repeticoes" placeholder="Repetições" required>
-      
+
       <label for="observacoes">Observações</label>
       <input type="text" class="observacoes" placeholder="Observações">
-      
+
       <h3>Escolha o Exemplo do Exercício</h3>
       <input type="file" class="gifInput" accept="image/gif" required>
       <img class="preview" src="" alt="Preview do GIF" style="display:none;">
@@ -56,6 +57,7 @@
   </template>
 
   <script>
+
     const addExercicioBtn = document.getElementById('addExercicioBtn');
     const exercicioContainer = document.getElementById('exercicioContainer');
     const exercicioTemplate = document.getElementById('exercicioTemplate');
@@ -99,18 +101,18 @@
         method: 'POST',
         body: formData
       })
-      .then(response => {
-        if (!response.ok) {
-          return response.json().then(error => { throw new Error(error.message); });
-        }
-        return response.json();
-      })
-      .then(data => {
-        alert('Treino cadastrado com sucesso! : ' + grupoMuscular);
-      })
-      .catch((error) => {
-        alert('Erro no cadastro: ' + error.message);
-      });
+        .then(response => {
+          if (!response.ok) {
+            return response.json().then(error => { throw new Error(error.message); });
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert('Treino cadastrado com sucesso! : ' + grupoMuscular);
+        })
+        .catch((error) => {
+          alert('Erro no cadastro: ' + error.message);
+        });
     }
   </script>
 </body>

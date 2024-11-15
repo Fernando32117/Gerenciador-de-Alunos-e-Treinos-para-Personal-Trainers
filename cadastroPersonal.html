@@ -5,18 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Personal</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styleCadastro.css">
 </head>
 
 <body>
     <div class="login">
-        <h1>Cadastro do Personal</h1>
-        <form id="formCadastroPersonal"> <input type="text" id="nomePersonal" placeholder="Nome" required> <input
-                type="email" id="emailPersonal" placeholder="Email" required> <input type="password"
-                id="passwordPersonal" placeholder="Senha" required> <input type="text" id="cref" placeholder="CREF"
-                required>
-            <div class="button-container"> <button type="submit">Cadastrar</button> <button type="button"
-                    onclick="exit()">Voltar</button> </div>
+        <h2>Cadastro do Personal</h2>
+        <form id="formCadastroPersonal">
+            <input type="text" id="nomePersonal" placeholder="Nome" required>
+            <input type="email" id="emailPersonal" placeholder="Email" required>
+            <input type="password" id="passwordPersonal" placeholder="Senha" required>
+            <input type="text" id="cref" placeholder="CREF" required>
+            <div class="button-container">
+                <button type="submit">Cadastrar</button>
+                <button type="button" onclick="exit()">Voltar</button>
+            </div>
         </form>
     </div>
     <script src="scripts.js"></script>
