@@ -23,11 +23,11 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Middleware para servir arquivos estáticos  
-app.use(express.static(path.join(__dirname)));  
+app.use(express.static(path.join(__dirname)));
 
 // Rota para a página inicial  
-app.get('/', (_req, res) => {  
-    res.sendFile(path.join(__dirname, 'index.html'));  
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 
@@ -116,9 +116,54 @@ app.post('/deletePersonal', (req, res) => {
     res.json({ message: 'Conta excluída com sucesso!' });
   });
 });
+// Rota para editar cadastro Personal
+app.put('/usuarioPersonal/:id', (req, res) => {
+  const { id } = req.params;
+  const { nomePersonal, emailPersonal, passwordPersonal, cref } = req.body;
+
+  const sql = `UPDATE usuarioPersonal SET nomePersonal = ?, emailPersonal = ?, passwordPersonal = ?, cref = ? WHERE id = ?`;
+
+  db.run(sql, [nomePersonal, emailPersonal, passwordPersonal, cref, id], function (err) {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    res.json({ message: 'Informações atualizadas com sucesso', changes: this.changes });
+  });
+});
 
 
 
+// Rota para editar cadastro Aluno
+app.put('/usuarioAluno/:id', (req, res) => {
+  const { id } = req.params;
+  const { nomeAluno, alunoNascimento, alunoPeso, alunoAltura, alunoLogin, alunoSenha } = req.body;
+  console.log('Dados recebidos no servidor:', req.body);
+  const sql = `UPDATE usuarioAluno SET nomeAluno = ?, alunoNascimento = ?, alunoPeso = ?, alunoAltura = ?, alunoLogin = ?, alunoSenha = ? WHERE id = ?`;
+
+  db.run(sql, [nomeAluno, alunoNascimento, alunoPeso, alunoAltura, alunoLogin, alunoSenha, id], function (err) {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    res.json({ message: 'Informações atualizadas com sucesso', changes: this.changes });
+  });
+});
+
+
+
+// Rota para obter detalhes de um aluno específico
+app.get('/api/aluno/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = `SELECT * FROM usuarioAluno WHERE id = ?`;
+
+  db.get(sql, [id], (err, row) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    res.json({ aluno: row });
+  });
+});
+
+// Rota para visualizar os alunos cadastrados
 app.get('/api/alunos', (req, res) => {
   db.all('SELECT * FROM usuarioAluno', [], (err, rows) => {
     if (err) {
@@ -128,6 +173,8 @@ app.get('/api/alunos', (req, res) => {
     res.json({ alunos: rows });
   });
 });
+
+
 
 // Rota para excluir um aluno pelo alunoLogin (email de login)
 app.delete('/api/alunos/:alunoLogin', (req, res) => {
@@ -219,20 +266,7 @@ app.post('/cadastroTreinoAluno', upload.single('gif'), (req, res) => {
 
 
 
-// Rota para editar cadastro Personal
-app.put('/usuarioPersonal/:id', (req, res) => {
-  const { id } = req.params;
-  const { nomePersonal, emailPersonal, passwordPersonal, cref } = req.body;
 
-  const sql = `UPDATE usuarioPersonal SET nomePersonal = ?, emailPersonal = ?, passwordPersonal = ?, cref = ? WHERE id = ?`;
-
-  db.run(sql, [nomePersonal, emailPersonal, passwordPersonal, cref, id], function (err) {
-    if (err) {
-      return res.status(400).json({ error: err.message });
-    }
-    res.json({ message: 'Informações atualizadas com sucesso', changes: this.changes });
-  });
-});
 
 
 

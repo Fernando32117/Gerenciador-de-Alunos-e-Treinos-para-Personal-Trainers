@@ -29,7 +29,6 @@
     </div>
   </div>
 
-
   <!-- Formulário de confirmação de exclusão de conta -->
   <div id="deleteAccountForm" style="display:none;">
     <h2>Excluir Conta</h2>
@@ -52,10 +51,24 @@
     <button type="button" onclick="updatePersonal(localStorage.getItem('userId'))">Salvar Alterações</button>
   </div>
 
+  <!-- Formulário de edição de aluno -->
+  <div id="editAccountFormAluno" style="display:none;" data-id="">
+    <h2>Editar Aluno</h2>
+    <label for="nomeEditAluno">Nome:</label>
+    <input type="text" id="nomeEditAluno">
+    <label for="emailEditAluno">Email:</label>
+    <input type="email" id="emailEditAluno">
+    <label for="nascimentoEditAluno">Nascimento:</label>
+    <input type="date" id="nascimentoEditAluno">
+    <label for="senhaEditAluno">Senha:</label>
+    <input type="password" id="senhaEditAluno">
+    <label for="pesoEditAluno">Peso:</label>
+    <input type="number" id="pesoEditAluno">
+    <label for="alturaEditAluno">Altura:</label>
+    <input type="number" id="alturaEditAluno">
+    <button type="button" onclick="updateAluno()">Salvar Alterações</button>
+  </div>
   <script>
-
-    // Função para listar alunos com botões de ação
-    // Função para alternar a exibição da lista de alunos
     function listarAlunos() {
       const listaAlunosContainer = document.getElementById('lista-alunos');
 
@@ -110,6 +123,80 @@
       }
     }
 
+    // Função para mostrar o formulário de edição com detalhes atuais do aluno
+    function editarAluno(id) {
+      const editForm = document.getElementById('editAccountFormAluno');
+
+      // Verificar se o formulário está visível
+      if (editForm.style.display === 'block') {
+        editForm.style.display = 'none';
+      } else {
+        // Buscar os detalhes atuais do aluno
+        fetch(`/api/aluno/${id}`)
+          .then(response => response.json())
+          .then(aluno => {
+            console.log('Dados recebidos do aluno:', aluno);
+
+            // Preencher o formulário com detalhes atuais
+            document.getElementById('nomeEditAluno').value = aluno.nomeAluno || '';
+            document.getElementById('emailEditAluno').value = aluno.alunoLogin || '';
+            document.getElementById('senhaEditAluno').value = aluno.alunoSenha || '';
+            document.getElementById('nascimentoEditAluno').value = aluno.alunoNascimento || '';
+            document.getElementById('pesoEditAluno').value = aluno.alunoPeso || '';
+            document.getElementById('alturaEditAluno').value = aluno.alunoAltura || '';
+
+            // Armazenar o ID do aluno em um input oculto ou atributo para uso posterior
+            editForm.dataset.id = id;
+
+            // Mostrar o formulário de edição
+            editForm.style.display = 'block';
+          })
+          .catch(error => console.error('Erro ao buscar detalhes do aluno:', error));
+      }
+    }
+
+    // Função para atualizar os detalhes do aluno
+    function updateAluno() {
+      const id = document.getElementById('editAccountFormAluno').dataset.id;
+      const nome = document.getElementById('nomeEditAluno').value;
+      const email = document.getElementById('emailEditAluno').value;
+      const senha = document.getElementById('senhaEditAluno').value;
+      const nascimento = document.getElementById('nascimentoEditAluno').value;
+      const peso = document.getElementById('pesoEditAluno').value;
+      const altura = document.getElementById('alturaEditAluno').value;
+
+      const data = {
+        nomeAluno: nome,
+        alunoLogin: email,
+        alunoSenha: senha,
+        alunoNascimento: nascimento,
+        alunoPeso: peso,
+        alunoAltura: altura,
+      };
+
+      console.log('Dados enviados:', data);
+
+      fetch(`/usuarioAluno/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.message) {
+            console.log('Atualização bem-sucedida:', result);
+            alert('Informações atualizadas com sucesso');
+            document.getElementById('editAccountFormAluno').style.display = 'none';
+            listarAlunos();
+          } else {
+            console.error('Erro ao atualizar aluno:', result.error);
+            alert('Erro ao atualizar aluno');
+          }
+        })
+        .catch(error => console.error('Erro ao atualizar aluno:', error));
+    }
 
     // Função para excluir aluno
     function excluirAluno(alunoLogin) {
@@ -129,8 +216,6 @@
           .catch(error => console.error('Erro ao excluir aluno:', error));
       }
     }
-
-
 
     // Função para preencher o formulário de edição com os dados atuais
     function fillEditForm(nome, email, cref) {
@@ -157,7 +242,6 @@
         form.style.display = 'none';
       }
     }
-
 
     // Função para fazer logout
     function logout() {
