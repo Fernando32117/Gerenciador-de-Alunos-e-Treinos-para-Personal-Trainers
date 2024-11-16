@@ -121,7 +121,8 @@
   }
   
   #deleteAccountForm button,
-  #editAccountForm button {
+  #editAccountForm button,
+  #editAccountFormAluno button {
     width: 100%;
     padding: 12px;
     background-color: #e0a800;
