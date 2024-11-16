@@ -51,7 +51,7 @@ npm install
 - Execute a aplicação:
 
 ```bash  
-node server.js
+node server/server.js
 ```
 
 ## Desenvolvedor

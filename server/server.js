@@ -21,13 +21,24 @@ const port = 3000;
 // Middleware para fazer parsing do corpo das requisições (necessário para POST)
 app.use(cors());
 app.use(bodyParser.json());
+// Middleware para processar JSON no body das requisições
+app.use(express.json());
+
+// Servir a pasta 'css'
+app.use('/css', express.static(path.join(__dirname, '../css')));
+// Servir a pasta 'images'
+app.use('/img', express.static(path.join(__dirname, '../img')));
+// Servir a pasta 'js'
+app.use('/js', express.static(path.join(__dirname, '../js')));
 
 // Middleware para servir arquivos estáticos  
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname))); 
+// Configura o diretório para servir arquivos estáticos
+app.use(express.static('pages')); 
 
 // Rota para a página inicial  
 app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'pages/index.html'));
 });
 
 

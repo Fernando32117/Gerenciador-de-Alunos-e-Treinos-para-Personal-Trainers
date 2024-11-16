@@ -8,13 +8,13 @@
   /* Corpo da página */
   body {
     font-family: Arial, sans-serif;
-    background: url('aluno.jpg') no-repeat center center/cover;
+    background: url('../img/personal.jpg') no-repeat center center/cover;
     background-size: cover;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(5px); /* Desfoque do fundo */
+    backdrop-filter: blur(10px); /* Desfoque do fundo */
   }
   
   /* Container do Dashboard */
@@ -32,8 +32,8 @@
   }
   
   .dashboard:hover {
-    transform: scale(1.05); /* Efeito de zoom ao passar o mouse */
-    opacity: 1; /* Leve redução da opacidade para destaque */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    transform: translateY(-5px); /* Movimento para cima */
   }
   
   /* Cabeçalho */
