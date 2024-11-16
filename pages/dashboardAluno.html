@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Aluno</title>
   <link rel="stylesheet" href="../css/styleDashboardAluno.css">
+  <script src="https://kit.fontawesome.com/71ef6d2940.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
   <div class="dashboard">
+    <label>Aluno</label>
     <header>
-      <div class="notification-icon"><span>🏋️‍♀️</span></div>
+      <i class="fa-solid fa-user fa-2x fa-flip" style="--fa-animation-duration: 3s;"></i>
       <div class="name" id="alunoName"></div>
-      <div class="notification-icon"><span>🏋️</span></div>
+      <i class="fa-solid fa-user fa-2x fa-flip" style="--fa-animation-duration: 3s;"></i>
     </header>
     <div class="button-container">
       <button type="button" onclick="treino()">Treinos</button>
       <button type="button" onclick="mensagem()">Enviar Mensagem</button>
-      <button type="button" onclick="logout()">Sair</button> <!-- Chama a função logout -->
+      <button type="button" onclick="logout()"
+        style="display: flex; justify-content: center; align-items: center; width: 100%; padding: 10px; position: relative;">
+        Sair
+        <i class="fa-solid fa-arrow-right-from-bracket" style="margin-left: 10px; position: absolute; right: 10px;"></i>
+      </button>
+      <!-- Chama a função logout -->
     </div>
   </div>
   <script>
