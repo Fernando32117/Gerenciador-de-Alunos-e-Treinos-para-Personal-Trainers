@@ -70,8 +70,14 @@ node server.js
 ### Tela de Login do Personal Trainer
 ![Login Personal](./screenshots/loginPersonal.png)
 
+### Tela de dashboard do Personal Trainer
+![Login Personal](./screenshots/dashboardPersonal.png)
+
 ### Tela de Login do Aluno
 ![Login Personal](./screenshots/loginAluno.png)
+
+### Tela de dashboard do Aluno
+![Login Personal](./screenshots/dashboardAluno.png)
 
 
 ## Licença
