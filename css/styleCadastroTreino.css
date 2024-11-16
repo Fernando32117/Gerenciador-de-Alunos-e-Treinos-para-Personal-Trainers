@@ -10,10 +10,13 @@
     font-family: Arial, sans-serif;
     background: url('../img/personal.jpg') no-repeat center center/cover;
     background-size: cover;
-    height: 100vh;
+    /*background-attachment: fixed; /* Fixa o background no viewport */
+    min-height: 100vh; /* Permite que o conteúdo ultrapasse a altura da tela */
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px; /* Para adicionar espaçamento em torno do conteúdo */
+    overflow: auto; /* Permite o scroll quando necessário */
   }
   
   /* Container de login/formulário */
@@ -22,12 +25,13 @@
     backdrop-filter: blur(8px); /* Desfoque no fundo */
     border-radius: 20px;
     padding: 30px;
-    width: 80%;
+    width: 40rem;
     max-width: 500px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     color: #fff;
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
+  
   
   .login:hover {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);

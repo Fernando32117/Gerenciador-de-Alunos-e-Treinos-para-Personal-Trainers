@@ -75,6 +75,41 @@ db.run(`CREATE TABLE IF NOT EXISTS treinoAluno (
   FOREIGN KEY (alunoId) REFERENCES usuarioAluno(id) )`);
 
 
+// Rota para buscar alunos pelo nome
+app.get('/buscar-alunos', (req, res) => {
+  const { nome } = req.query;
+  console.log(`Busca recebida com nome: ${nome}`); // Log da busca
+
+  db.all(
+    `SELECT * FROM usuarioAluno WHERE nomeAluno LIKE ?`,
+    [`%${nome}%`],
+    (err, rows) => {
+      if (err) {
+        console.error('Erro na consulta ao banco:', err); // Log do erro
+        return res.status(500).json({ error: err.message });
+      }
+      console.log('Resultados encontrados:', rows); // Log dos resultados
+      res.json(rows);
+    }
+  );
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Rota para cadastro do personal trainer
 app.post('/usuarioPersonal', (req, res) => {
@@ -280,7 +315,10 @@ app.post('/cadastroTreinoAluno', upload.single('gif'), (req, res) => {
 
 
 
-
+// Servir o HTML
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'rascunho.html')); // Troque 'rascunho.html' pelo nome correto do seu arquivo HTML
+});
 
 
 // Iniciar o servidor Express

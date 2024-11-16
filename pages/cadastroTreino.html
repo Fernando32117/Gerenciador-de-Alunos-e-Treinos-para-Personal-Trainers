@@ -7,6 +7,26 @@
   <title>Cadastro de Treino</title>
   <link rel="stylesheet" href="../css/styleCadastroTreino.css">
   <script src="../js/scripts.js"></script>
+  <style>
+    #resultadoBusca {
+      max-height: 200px;
+      overflow-x: auto;
+      position: sticky;
+      width: 300px;
+      padding: 0;
+      margin: 0;
+    }
+
+    #resultadoBusca li {
+      padding: 8px;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    #resultadoBusca li:hover {
+      background-color: #ffcc00;
+    }
+  </style>
 </head>
 
 <body>
@@ -14,7 +34,8 @@
     <h2>Cadastro de Treinos</h2>
     <form id="formCadastroTreinoAluno" onsubmit="handleCadastroTreino(event)">
       <label for="aluno">Buscar Aluno</label>
-      <input type="text" id="aluno" oninput="buscarAluno(event)" placeholder="Digite o nome do aluno" required>
+      <input type="text" id="inputBusca" placeholder="Digite o nome do aluno" onkeyup="buscarAluno()" />
+      <ul id="resultadoBusca" style="list-style: none; padding: 0; margin: 0;"></ul>
 
       <label for="grupoMuscular">Grupo Muscular</label>
       <select id="grupoMuscular" required>
@@ -57,6 +78,49 @@
   </template>
 
   <script>
+    async function buscarAluno() {
+      const input = document.getElementById('inputBusca').value.trim(); // Remover espaços em branco
+      const lista = document.getElementById('resultadoBusca');
+
+      // Limpar resultados anteriores
+      lista.innerHTML = '';
+
+      // Não buscar se o campo estiver vazio
+      if (input === '') {
+        return; // Apenas sair da função
+      }
+
+      try {
+        const response = await fetch(`http://127.0.0.1:3000/buscar-alunos?nome=${input}`);
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.statusText}`);
+        }
+        const alunos = await response.json();
+
+        // Filtrar alunos que começam exatamente com o texto digitado
+        const resultadosFiltrados = alunos.filter(aluno =>
+          aluno.nomeAluno.toLowerCase().startsWith(input.toLowerCase())
+        );
+
+        if (resultadosFiltrados.length === 0) {
+          lista.innerHTML = '<li>Nenhum aluno encontrado</li>';
+          return;
+        }
+
+        // Criar lista de sugestões
+        resultadosFiltrados.forEach(aluno => {
+          const item = document.createElement('li');
+          item.textContent = `${aluno.nomeAluno}`;
+          item.onclick = () => {
+            document.getElementById('inputBusca').value = aluno.nomeAluno; // Preencher o input com o nome do aluno
+            lista.innerHTML = ''; // Limpar a lista de sugestões
+          };
+          lista.appendChild(item);
+        });
+      } catch (error) {
+        console.error('Erro ao buscar alunos:', error);
+      }
+    }
 
     const addExercicioBtn = document.getElementById('addExercicioBtn');
     const exercicioContainer = document.getElementById('exercicioContainer');
@@ -114,6 +178,7 @@
           alert('Erro no cadastro: ' + error.message);
         });
     }
+
   </script>
 </body>
 

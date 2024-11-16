@@ -8,10 +8,11 @@
   body {
     font-family: Arial, sans-serif;
     background: url('../img/background.jpg') no-repeat center center/cover;
-    height: 100vh;
+    min-height: 100vh; /* Permite que o conteúdo ultrapasse a altura da tela */
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: auto; /* Permite o scroll quando necessário */
   }
   
   /* Container de login */

@@ -10,10 +10,11 @@ body {
   font-family: Arial, sans-serif;
   background: url('../img/personal.jpg') no-repeat center center/cover;
   background-size: cover;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: auto; /* Permite o scroll quando necessário */
 }
 
 /* Container de login/formulário */
