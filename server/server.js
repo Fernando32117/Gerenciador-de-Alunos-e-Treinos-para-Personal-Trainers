@@ -32,9 +32,9 @@ app.use('/img', express.static(path.join(__dirname, '../img')));
 app.use('/js', express.static(path.join(__dirname, '../js')));
 
 // Middleware para servir arquivos estáticos  
-app.use(express.static(path.join(__dirname))); 
+app.use(express.static(path.join(__dirname)));
 // Configura o diretório para servir arquivos estáticos
-app.use(express.static('pages')); 
+app.use(express.static('pages'));
 
 // Rota para a página inicial  
 app.get('/', (_req, res) => {
@@ -64,7 +64,7 @@ db.run(`CREATE TABLE IF NOT EXISTS usuarioAluno (
 )`);
 
 // Criar tabela se não existir treinoAluno
-db.run(`CREATE TABLE IF NOT EXISTS treinoAluno ( 
+db.run(`CREATE TABLE IF NOT EXISTS treinoAluno (
   id INTEGER PRIMARY KEY AUTOINCREMENT, 
   aluno INTEGER NOT NULL, 
   grupoMuscular TEXT NOT NULL, 
@@ -72,7 +72,105 @@ db.run(`CREATE TABLE IF NOT EXISTS treinoAluno (
   repeticoes INTEGER NOT NULL, 
   observacoes TEXT, 
   gif BLOB, 
-  FOREIGN KEY (alunoId) REFERENCES usuarioAluno(id) )`);
+  FOREIGN KEY (aluno) REFERENCES usuarioAluno(id)
+)`);
+
+// Migração para corrigir a tabela treinoAluno
+function atualizarTabelaTreinoAluno() {
+  db.run(`ALTER TABLE treinoAluno RENAME TO treinoAluno_old`, (err) => {
+    if (err) {
+      console.error('Erro ao renomear a tabela antiga:', err.message);
+      return;
+    }
+    console.log('Tabela treinoAluno renomeada para treinoAluno_old.');
+
+    // Criar a nova tabela
+    db.run(`CREATE TABLE IF NOT EXISTS treinoAluno (
+      id INTEGER PRIMARY KEY AUTOINCREMENT, 
+      aluno INTEGER NOT NULL, 
+      grupoMuscular TEXT NOT NULL, 
+      series INTEGER NOT NULL, 
+      repeticoes INTEGER NOT NULL, 
+      observacoes TEXT, 
+      gif BLOB, 
+      FOREIGN KEY (aluno) REFERENCES usuarioAluno(id)
+    )`, (err) => {
+      if (err) {
+        console.error('Erro ao criar a nova tabela treinoAluno:', err.message);
+        return;
+      }
+      console.log('Nova tabela treinoAluno criada com sucesso.');
+
+      // Copiar os dados para a nova tabela
+      db.run(`
+        INSERT INTO treinoAluno (id, aluno, grupoMuscular, series, repeticoes, observacoes, gif)
+        SELECT id, aluno, grupoMuscular, series, repeticoes, observacoes, gif
+        FROM treinoAluno_old
+      `, (err) => {
+        if (err) {
+          console.error('Erro ao copiar os dados para a nova tabela:', err.message);
+          return;
+        }
+        console.log('Dados copiados para a nova tabela treinoAluno.');
+      });   
+
+        // Apagar a tabela antiga
+        db.run(`DROP TABLE treinoAluno_old`, (err) => {
+          if (err) {
+            console.error('Erro ao apagar a tabela antiga:', err.message);
+            return;
+          }
+          console.log('Tabela treinoAluno_old apagada com sucesso.');
+        });
+      });
+    });
+  };
+
+// // Iniciar a migração (chame manualmente quando necessário)
+// atualizarTabelaTreinoAluno();
+
+
+app.post('/cadastrar-treino', upload.array('exercicios[][gif]'), (req, res) => {
+  try {
+    // Capturar dados do aluno e do grupo muscular
+    const { aluno, grupoMuscular } = req.body;
+
+    if (!aluno || !grupoMuscular || !req.files) {
+      console.error('Dados incompletos recebidos:', req.body, req.files);
+      return res.status(400).send('Dados incompletos.');
+    }
+
+    // Parse dos exercícios enviados
+    const exercicios = JSON.parse(req.body.exercicios);
+
+    if (!exercicios || !Array.isArray(exercicios)) {
+      console.error('Dados dos exercícios estão inválidos:', exercicios);
+      return res.status(400).send('Dados dos exercícios inválidos.');
+    }
+
+    // Processar e salvar os dados no banco de dados
+    const stmt = db.prepare(`INSERT INTO treinoAluno (aluno, grupoMuscular, series, repeticoes, observacoes, gif) VALUES (?, ?, ?, ?, ?, ?)`);
+
+    exercicios.forEach((exercicio, index) => {
+      const gifFile = req.files[index] ? req.files[index].buffer : null; // Buffer do arquivo enviado
+
+      stmt.run(
+        aluno,
+        grupoMuscular,
+        exercicio.series,
+        exercicio.repeticoes,
+        exercicio.observacoes,
+        gifFile
+      );
+    });
+
+    stmt.finalize();
+    res.send('Treino cadastrado com sucesso.');
+  } catch (err) {
+    console.error('Erro ao cadastrar treino:', err);
+    res.status(500).send('Erro interno ao cadastrar treino.');
+  }
+});
 
 
 // Rota para buscar alunos pelo nome
@@ -93,23 +191,6 @@ app.get('/buscar-alunos', (req, res) => {
     }
   );
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Rota para cadastro do personal trainer
 app.post('/usuarioPersonal', (req, res) => {
@@ -193,8 +274,6 @@ app.put('/usuarioAluno/:id', (req, res) => {
     res.json({ message: 'Informações atualizadas com sucesso', changes: this.changes });
   });
 });
-
-
 
 // Rota para obter detalhes de um aluno específico
 app.get('/api/aluno/:id', (req, res) => {
@@ -286,29 +365,6 @@ app.post('/loginAluno', (req, res) => {
   });
 });
 
-
-app.post('/cadastroTreinoAluno', upload.single('gif'), (req, res) => {
-  const { aluno, grupoMuscular, series, repeticoes, observacoes } = req.body;
-  const gif = req.file.buffer;
-
-  // Pegue o ID do aluno do banco de dados baseado no nome (ou outra lógica que preferir)
-  const alunoIdSql = `SELECT nomeAluno FROM usuarioAluno WHERE nomeAluno = ?`;
-  db.get(alunoIdSql, [aluno], (err, row) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    if (!row) {
-      return res.status(400).json({ message: 'Aluno não encontrado' });
-    }
-    const sql = `INSERT INTO treinoAluno (alunoId, grupoMuscular, series, repeticoes, observacoes, gif) VALUES (?, ?, ?, ?, ?, ?)`;
-    db.run(sql, [aluno, grupoMuscular, series, repeticoes, observacoes, gif], function (err) {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.json({ id: this.lastID }); // Retorna o ID do novo registro
-    });
-  });
-});
 
 
 

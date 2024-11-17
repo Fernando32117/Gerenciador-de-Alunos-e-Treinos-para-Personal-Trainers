@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Treino</title>
   <link rel="stylesheet" href="../css/styleCadastroTreino.css">
-  <script src="../js/scripts.js"></script>
   <style>
     #resultadoBusca {
       max-height: 200px;
@@ -60,7 +59,7 @@
   <template id="exercicioTemplate">
     <div class="exercicio">
       <label for="nomeExex">Nome do Exercício</label>
-      <input type="text" class="observacoes" placeholder="Observações">
+      <input type="text" class="observacoes" placeholder="Nome do Exercício" required>
 
       <label for="series">Séries</label>
       <input type="number" class="series" placeholder="Séries" required>
@@ -78,26 +77,33 @@
   </template>
 
   <script>
+    function voltarDashboardPersonal() {
+      // Redireciona para o arquivo dashboardPersonal.html
+      window.location.href = "dashboardPersonal.html";
+    }
+
+    // Variável global para armazenar o ID do aluno selecionado
+    let alunoSelecionadoId = null;
+
+    // Buscar aluno pelo nome
     async function buscarAluno() {
-      const input = document.getElementById('inputBusca').value.trim(); // Remover espaços em branco
+      const input = document.getElementById('inputBusca').value.trim();
       const lista = document.getElementById('resultadoBusca');
 
-      // Limpar resultados anteriores
       lista.innerHTML = '';
 
-      // Não buscar se o campo estiver vazio
       if (input === '') {
-        return; // Apenas sair da função
+        return; // Não busca se o campo estiver vazio
       }
 
       try {
-        const response = await fetch(`http://127.0.0.1:3000/buscar-alunos?nome=${input}`);
+        const response = await fetch(`http://localhost:3000/buscar-alunos?nome=${input}`);
         if (!response.ok) {
           throw new Error(`Erro na requisição: ${response.statusText}`);
         }
         const alunos = await response.json();
 
-        // Filtrar alunos que começam exatamente com o texto digitado
+        // Filtrar alunos e exibir resultados
         const resultadosFiltrados = alunos.filter(aluno =>
           aluno.nomeAluno.toLowerCase().startsWith(input.toLowerCase())
         );
@@ -107,13 +113,13 @@
           return;
         }
 
-        // Criar lista de sugestões
         resultadosFiltrados.forEach(aluno => {
           const item = document.createElement('li');
-          item.textContent = `${aluno.nomeAluno}`;
+          item.textContent = aluno.nomeAluno;
           item.onclick = () => {
-            document.getElementById('inputBusca').value = aluno.nomeAluno; // Preencher o input com o nome do aluno
-            lista.innerHTML = ''; // Limpar a lista de sugestões
+            document.getElementById('inputBusca').value = aluno.nomeAluno;
+            alunoSelecionadoId = aluno.id; // Salvar o ID do aluno selecionado
+            lista.innerHTML = ''; // Limpar a lista
           };
           lista.appendChild(item);
         });
@@ -122,65 +128,77 @@
       }
     }
 
-    const addExercicioBtn = document.getElementById('addExercicioBtn');
-    const exercicioContainer = document.getElementById('exercicioContainer');
-    const exercicioTemplate = document.getElementById('exercicioTemplate');
+    // Adicionar novo campo de exercício
+    document.addEventListener('DOMContentLoaded', () => {
+      const addExercicioBtn = document.getElementById('addExercicioBtn');
+      const exercicioContainer = document.getElementById('exercicioContainer');
+      const exercicioTemplate = document.getElementById('exercicioTemplate');
 
-    addExercicioBtn.addEventListener('click', function () {
-      const newExercicio = exercicioTemplate.content.cloneNode(true);
-      exercicioContainer.appendChild(newExercicio);
+      if (addExercicioBtn) {
+        addExercicioBtn.addEventListener('click', function () {
+          const newExercicio = exercicioTemplate.content.cloneNode(true);
+          exercicioContainer.appendChild(newExercicio);
+        });
+      }
     });
 
-    function handleCadastroTreino(event) {
-      event.preventDefault();
+    // Submeter o formulário para cadastrar o treino
+    async function handleCadastroTreino(event) {
+      event.preventDefault(); // Evitar recarregar a página
 
-      const aluno = document.getElementById('aluno').value;
+      if (!alunoSelecionadoId) {
+        alert('Por favor, selecione um aluno antes de cadastrar o treino.');
+        return;
+      }
+
       const grupoMuscular = document.getElementById('grupoMuscular').value;
-      const series = document.querySelectorAll('.series');
-      const repeticoes = document.querySelectorAll('.repeticoes');
-      const observacoes = document.querySelectorAll('.observacoes');
-      const gifs = document.querySelectorAll('.gifInput');
+
+      // Capturar os dados dos exercícios
+      const exercicios = Array.from(document.querySelectorAll('.exercicio')).map(exercicio => ({
+        series: exercicio.querySelector('.series').value,
+        repeticoes: exercicio.querySelector('.repeticoes').value,
+        observacoes: exercicio.querySelector('.observacoes').value
+      }));
 
       const formData = new FormData();
-      formData.append('aluno', aluno);
+      formData.append('aluno', alunoSelecionadoId);
       formData.append('grupoMuscular', grupoMuscular);
+      formData.append('exercicios', JSON.stringify(exercicios)); // Serializar exercícios como JSON
 
-      series.forEach((s, index) => {
-        formData.append(`series${index}`, s.value);
+      // Adicionar arquivos de GIFs
+      document.querySelectorAll('.gifInput').forEach(fileInput => {
+        if (fileInput.files[0]) {
+          formData.append('exercicios[][gif]', fileInput.files[0]);
+        }
       });
 
-      repeticoes.forEach((r, index) => {
-        formData.append(`repeticoes${index}`, r.value);
-      });
-
-      observacoes.forEach((o, index) => {
-        formData.append(`observacoes${index}`, o.value);
-      });
-
-      gifs.forEach((g, index) => {
-        formData.append(`gif${index}`, g.files[0]);
-      });
-
-      fetch('http://localhost:3000/cadastroTreinoAluno', {
-        method: 'POST',
-        body: formData
-      })
-        .then(response => {
-          if (!response.ok) {
-            return response.json().then(error => { throw new Error(error.message); });
-          }
-          return response.json();
-        })
-        .then(data => {
-          alert('Treino cadastrado com sucesso! : ' + grupoMuscular);
-        })
-        .catch((error) => {
-          alert('Erro no cadastro: ' + error.message);
+      try {
+        const response = await fetch('http://localhost:3000/cadastrar-treino', {
+          method: 'POST',
+          body: formData
         });
+
+        if (!response.ok) {
+          throw new Error(`Erro ao cadastrar treino: ${response.statusText}`);
+        }
+
+        alert('Treino cadastrado com sucesso!');
+        window.location.href = "dashboardPersonal.html";
+
+      } catch (error) {
+        console.error('Erro ao cadastrar treino:', error);
+        alert('Erro ao cadastrar treino. Tente novamente.');
+      }
     }
 
+
+
+
+
   </script>
+  <script src="../js/scripts.js"></script>
 </body>
+
 
 
 

@@ -29,27 +29,27 @@ window.onload = function () {
         },
         body: JSON.stringify({ emailPersonal, passwordPersonal })
       })
-      .then(async response => {
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message);
-        }
-        return response.json();
-      })
-      .then(data => {
-        alert('Login realizado com sucesso! Bem-vindo(a), ' + data.nomePersonal);
+        .then(async response => {
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message);
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert('Login realizado com sucesso! Bem-vindo(a), ' + data.nomePersonal);
 
-        // Armazena os dados do personal no localStorage
-        localStorage.setItem('userId', data.id);
-        localStorage.setItem('nomePersonal', data.nomePersonal);
-        localStorage.setItem('emailPersonal', data.emailPersonal);
-        localStorage.setItem('crefPersonal', data.cref);
+          // Armazena os dados do personal no localStorage
+          localStorage.setItem('userId', data.id);
+          localStorage.setItem('nomePersonal', data.nomePersonal);
+          localStorage.setItem('emailPersonal', data.emailPersonal);
+          localStorage.setItem('crefPersonal', data.cref);
 
-        window.location.href = "dashboardPersonal.html";
-      })
-      .catch((error) => {
-        alert('Erro no login: ' + error.message);
-      });
+          window.location.href = "dashboardPersonal.html";
+        })
+        .catch((error) => {
+          alert('Erro no login: ' + error.message);
+        });
     });
   }
 
@@ -72,27 +72,27 @@ window.onload = function () {
         },
         body: JSON.stringify({ nomePersonal, emailPersonal, passwordPersonal, cref })
       })
-      .then(async response => {
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message);
-        }
-        return response.json();
-      })
-      .then(data => {
-        alert('Personal cadastrado com sucesso! : ' + nomePersonal);
+        .then(async response => {
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message);
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert('Personal cadastrado com sucesso! : ' + nomePersonal);
 
-        // Armazena os dados do personal no localStorage
-        localStorage.setItem('userId', data.id);
-        localStorage.setItem('nomePersonal', nomePersonal);
-        localStorage.setItem('emailPersonal', emailPersonal);
-        localStorage.setItem('crefPersonal', cref);
+          // Armazena os dados do personal no localStorage
+          localStorage.setItem('userId', data.id);
+          localStorage.setItem('nomePersonal', nomePersonal);
+          localStorage.setItem('emailPersonal', emailPersonal);
+          localStorage.setItem('crefPersonal', cref);
 
-        window.location.href = "dashboardPersonal.html";
-      })
-      .catch((error) => {
-        alert('Erro no cadastro: ' + error.message);
-      });
+          window.location.href = "dashboardPersonal.html";
+        })
+        .catch((error) => {
+          alert('Erro no cadastro: ' + error.message);
+        });
     });
   }
 
@@ -113,24 +113,24 @@ window.onload = function () {
         },
         body: JSON.stringify({ alunoLogin, alunoPassword })
       })
-      .then(async response => {
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message);
-        }
-        return response.json();
-      })
-      .then(data => {
-        alert('Login realizado com sucesso! Bem-vindo(a), ' + data.nomeAluno);
+        .then(async response => {
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message);
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert('Login realizado com sucesso! Bem-vindo(a), ' + data.nomeAluno);
 
-        // Armazena o nome do aluno no localStorage
-        localStorage.setItem('nomeAluno', data.nomeAluno);
+          // Armazena o nome do aluno no localStorage
+          localStorage.setItem('nomeAluno', data.nomeAluno);
 
-        window.location.href = "dashboardAluno.html"; // Defina o redirecionamento para o dashboard do aluno
-      })
-      .catch((error) => {
-        alert('Erro no login: ' + error.message);
-      });
+          window.location.href = "dashboardAluno.html"; // Defina o redirecionamento para o dashboard do aluno
+        })
+        .catch((error) => {
+          alert('Erro no login: ' + error.message);
+        });
     });
   }
 
@@ -156,20 +156,20 @@ window.onload = function () {
         },
         body: JSON.stringify({ nomeAluno, generoAluno, alunoNascimento, alunoPeso, alunoAltura, alunoLogin, alunoPassword })
       })
-      .then(async response => {
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message);
-        }
-        return response.json();
-      })
-      .then(data => {
-        alert('Aluno cadastrado com sucesso! : ' + nomeAluno);
-        window.location.href = "dashboardPersonal.html";
-      })
-      .catch((error) => {
-        alert('Erro no cadastro: ' + error.message);
-      });
+        .then(async response => {
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message);
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert('Aluno cadastrado com sucesso! : ' + nomeAluno);
+          window.location.href = "dashboardPersonal.html";
+        })
+        .catch((error) => {
+          alert('Erro no cadastro: ' + error.message);
+        });
     });
   }
 
@@ -178,61 +178,27 @@ window.onload = function () {
   if (nomeAluno) {
     document.getElementById('alunoName').innerText = nomeAluno;
   }
+
+
+  const elemento = document.getElementById('passwordEdit'); // Substitua pelo ID do elemento correto
+  if (elemento) {
+    elemento.addEventListener('input', function () {
+      console.log('Input detectado!');
+    });
+  }
+
+  const outroElemento = document.getElementById('senhaEditAluno');
+  if (outroElemento) {
+    outroElemento.addEventListener('input', function () {
+      console.log('Outro input detectado!');
+    });
+  }
+
+
+
+
 };
 
-
-
-
-document.addEventListener('DOMContentLoaded', () => {  
-  const loginPersonalBtn = document.getElementById('loginPersonalBtn');  
-  const loginAlunoBtn = document.getElementById('loginAlunoBtn');  
-
-  loginPersonalBtn.addEventListener('click', () => {  
-    window.location.href = 'loginPersonal.html';  
-  });  
-
-  loginAlunoBtn.addEventListener('click', () => {  
-    window.location.href = 'loginAluno.html';  
-  });  
-});
-
-
-
-
-
-
-function handleCadastroTreino(event) {
-  event.preventDefault(); // Previne o comportamento padrão do formulário
-
-  const aluno = document.getElementById("aluno").value;
-  const grupoMuscular = document.getElementById("grupoMuscular").value;
-  const series = document.getElementById("series").value;
-  const repeticoes = document.getElementById("repeticoes").value;
-  const observacoes = document.getElementById("observacoes").value;
-  const gifInput = document.getElementById("gifInput").files[0];
-
-  const formData = new FormData();
-  formData.append('alunoId', aluno);
-  formData.append('grupoMuscular', grupoMuscular);
-  formData.append('series', series);
-  formData.append('repeticoes', repeticoes);
-  formData.append('observacoes', observacoes);
-  formData.append('gif', gifInput);
-
-  fetch('http://localhost:3000/cadastroTreinoAluno', {
-    method: 'POST',
-    body: formData
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Sucesso:', data);
-      alert('Treino cadastrado com sucesso! ID: ' + data.aluno);
-      window.location.href = "dashboardPersonal.html";
-    })
-    .catch((error) => {
-      console.error('Erro:', error);
-    });
-}
 
 
 function showCadastroPersonal() {
