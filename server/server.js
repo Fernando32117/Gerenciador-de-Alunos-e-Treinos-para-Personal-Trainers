@@ -72,8 +72,40 @@ db.run(`CREATE TABLE IF NOT EXISTS treinoAluno (
   repeticoes INTEGER NOT NULL, 
   observacoes TEXT, 
   gif BLOB, 
-  FOREIGN KEY (aluno) REFERENCES usuarioAluno(id)
+  FOREIGN KEY (aluno) REFERENCES usuarioAluno(id) ON DELETE CASCADE
 )`);
+
+// db.serialize(() => {
+//   // 1. Excluir a tabela original
+//   db.run(`DROP TABLE IF EXISTS treinoAluno`, function (err) {
+//     if (err) {
+//       console.error("Erro ao excluir tabela treinoAluno:", err.message);
+//       return;
+//     }
+//     console.log("Tabela treinoAluno excluída com sucesso.");
+
+//     // 2. Recriar a tabela com ON DELETE CASCADE
+//     db.run(`
+//       CREATE TABLE IF NOT EXISTS treinoAluno (
+//         id INTEGER PRIMARY KEY AUTOINCREMENT,
+//         aluno INTEGER NOT NULL,
+//         grupoMuscular TEXT NOT NULL,
+//         series INTEGER NOT NULL,
+//         repeticoes INTEGER NOT NULL,
+//         observacoes TEXT,
+//         gif BLOB,
+//         FOREIGN KEY (aluno) REFERENCES usuarioAluno(id) ON DELETE CASCADE
+//       )
+//     `, function (err) {
+//       if (err) {
+//         console.error("Erro ao recriar tabela treinoAluno:", err.message);
+//         return;
+//       }
+//       console.log("Tabela treinoAluno recriada com sucesso com ON DELETE CASCADE.");
+//     });
+//   });
+// });
+
 
 // Migração para corrigir a tabela treinoAluno
 function atualizarTabelaTreinoAluno() {
@@ -130,67 +162,6 @@ function atualizarTabelaTreinoAluno() {
 // atualizarTabelaTreinoAluno();
 
 
-app.post('/cadastrar-treino', upload.array('exercicios[][gif]'), (req, res) => {
-  try {
-    // Capturar dados do aluno e do grupo muscular
-    const { aluno, grupoMuscular } = req.body;
-
-    if (!aluno || !grupoMuscular || !req.files) {
-      console.error('Dados incompletos recebidos:', req.body, req.files);
-      return res.status(400).send('Dados incompletos.');
-    }
-
-    // Parse dos exercícios enviados
-    const exercicios = JSON.parse(req.body.exercicios);
-
-    if (!exercicios || !Array.isArray(exercicios)) {
-      console.error('Dados dos exercícios estão inválidos:', exercicios);
-      return res.status(400).send('Dados dos exercícios inválidos.');
-    }
-
-    // Processar e salvar os dados no banco de dados
-    const stmt = db.prepare(`INSERT INTO treinoAluno (aluno, grupoMuscular, series, repeticoes, observacoes, gif) VALUES (?, ?, ?, ?, ?, ?)`);
-
-    exercicios.forEach((exercicio, index) => {
-      const gifFile = req.files[index] ? req.files[index].buffer : null; // Buffer do arquivo enviado
-
-      stmt.run(
-        aluno,
-        grupoMuscular,
-        exercicio.series,
-        exercicio.repeticoes,
-        exercicio.observacoes,
-        gifFile
-      );
-    });
-
-    stmt.finalize();
-    res.send('Treino cadastrado com sucesso.');
-  } catch (err) {
-    console.error('Erro ao cadastrar treino:', err);
-    res.status(500).send('Erro interno ao cadastrar treino.');
-  }
-});
-
-
-// Rota para buscar alunos pelo nome
-app.get('/buscar-alunos', (req, res) => {
-  const { nome } = req.query;
-  console.log(`Busca recebida com nome: ${nome}`); // Log da busca
-
-  db.all(
-    `SELECT * FROM usuarioAluno WHERE nomeAluno LIKE ?`,
-    [`%${nome}%`],
-    (err, rows) => {
-      if (err) {
-        console.error('Erro na consulta ao banco:', err); // Log do erro
-        return res.status(500).json({ error: err.message });
-      }
-      console.log('Resultados encontrados:', rows); // Log dos resultados
-      res.json(rows);
-    }
-  );
-});
 
 // Rota para cadastro do personal trainer
 app.post('/usuarioPersonal', (req, res) => {
@@ -260,6 +231,68 @@ app.put('/usuarioPersonal/:id', (req, res) => {
 
 
 
+// Rota para cadastro do Treino do Aluno
+app.post('/cadastrar-treino', upload.array('exercicios[][gif]'), (req, res) => {
+  try {
+    // Capturar dados do aluno e do grupo muscular
+    const { aluno, grupoMuscular } = req.body;
+
+    if (!aluno || !grupoMuscular || !req.files) {
+      console.error('Dados incompletos recebidos:', req.body, req.files);
+      return res.status(400).send('Dados incompletos.');
+    }
+
+    // Parse dos exercícios enviados
+    const exercicios = JSON.parse(req.body.exercicios);
+
+    if (!exercicios || !Array.isArray(exercicios)) {
+      console.error('Dados dos exercícios estão inválidos:', exercicios);
+      return res.status(400).send('Dados dos exercícios inválidos.');
+    }
+
+    // Processar e salvar os dados no banco de dados
+    const stmt = db.prepare(`INSERT INTO treinoAluno (aluno, grupoMuscular, series, repeticoes, observacoes, gif) VALUES (?, ?, ?, ?, ?, ?)`);
+
+    exercicios.forEach((exercicio, index) => {
+      const gifFile = req.files[index] ? req.files[index].buffer : null; // Buffer do arquivo enviado
+
+      stmt.run(
+        aluno,
+        grupoMuscular,
+        exercicio.series,
+        exercicio.repeticoes,
+        exercicio.observacoes,
+        gifFile
+      );
+    });
+
+    stmt.finalize();
+    res.send('Treino cadastrado com sucesso.');
+  } catch (err) {
+    console.error('Erro ao cadastrar treino:', err);
+    res.status(500).send('Erro interno ao cadastrar treino.');
+  }
+});
+
+// Rota para buscar alunos pelo nome
+app.get('/buscar-alunos', (req, res) => {
+  const { nome } = req.query;
+  console.log(`Busca recebida com nome: ${nome}`); // Log da busca
+
+  db.all(
+    `SELECT * FROM usuarioAluno WHERE nomeAluno LIKE ?`,
+    [`%${nome}%`],
+    (err, rows) => {
+      if (err) {
+        console.error('Erro na consulta ao banco:', err); // Log do erro
+        return res.status(500).json({ error: err.message });
+      }
+      console.log('Resultados encontrados:', rows); // Log dos resultados
+      res.json(rows);
+    }
+  );
+});
+
 // Rota para editar cadastro Aluno
 app.put('/usuarioAluno/:id', (req, res) => {
   const { id } = req.params;
@@ -300,28 +333,28 @@ app.get('/api/alunos', (req, res) => {
 });
 
 
-
 // Rota para excluir um aluno pelo alunoLogin (email de login)
 app.delete('/api/alunos/:alunoLogin', (req, res) => {
   const alunoLogin = req.params.alunoLogin;
 
-  // Comando SQL para excluir o aluno pelo alunoLogin
+  // Excluir aluno (treinos serão automaticamente excluídos)
   const sql = `DELETE FROM usuarioAluno WHERE alunoLogin = ?`;
 
   db.run(sql, [alunoLogin], function (err) {
     if (err) {
       console.error('Erro ao excluir aluno:', err.message);
-      res.status(500).json({ error: 'Erro ao excluir aluno' });
+      return res.status(500).json({ error: 'Erro ao excluir aluno' });
+    }
+
+    // Verifica se o aluno foi excluído
+    if (this.changes > 0) {
+      res.json({ message: 'Aluno e seus treinos excluídos com sucesso' });
     } else {
-      // Verifica se algum registro foi deletado
-      if (this.changes > 0) {
-        res.json({ message: 'Aluno excluído com sucesso' });
-      } else {
-        res.status(404).json({ error: 'Aluno não encontrado' });
-      }
+      res.status(404).json({ error: 'Aluno não encontrado' });
     }
   });
 });
+
 
 
 
@@ -381,3 +414,62 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
+
+db.run(`PRAGMA foreign_keys = ON`, function (err) {
+  if (err) {
+    console.error("Erro ao ativar suporte a FOREIGN KEYS:", err.message);
+  } else {
+    console.log("Suporte a FOREIGN KEYS ativado.");
+  }
+});
+
+
+
+//Carga para adicionar Alunos e Personais de exemplo
+// Função para verificar se uma tabela está vazia e inserir exemplos
+function insertExamplesIfEmpty() {
+  // Verifica e insere dados na tabela usuarioPersonal
+  db.get(`SELECT COUNT(*) as count FROM usuarioPersonal`, (err, row) => {
+    if (err) {
+      console.error("Erro ao verificar usuarioPersonal:", err.message);
+    } else if (row.count === 0) {
+      db.run(`
+        INSERT INTO usuarioPersonal (nomePersonal, emailPersonal, passwordPersonal, cref)
+        VALUES 
+        ('João da Silva', 'joao.personal@example.com', 'senha123', 'CREF12345'),
+        ('Maria Pereira', 'maria.personal@example.com', 'senha456', 'CREF67890'),
+        ('Ana Oliveira', 'ana.personal@example.com', 'senha789', 'CREF11223')
+      `, (err) => {
+        if (err) {
+          console.error("Erro ao inserir exemplos em usuarioPersonal:", err.message);
+        } else {
+          console.log("Exemplos inseridos na tabela usuarioPersonal.");
+        }
+      });
+    }
+  });
+
+  // Verifica e insere dados na tabela usuarioAluno
+  db.get(`SELECT COUNT(*) as count FROM usuarioAluno`, (err, row) => {
+    if (err) {
+      console.error("Erro ao verificar usuarioAluno:", err.message);
+    } else if (row.count === 0) {
+      db.run(`
+        INSERT INTO usuarioAluno (nomeAluno, generoAluno, alunoNascimento, alunoPeso, alunoAltura, alunoLogin, alunoSenha)
+        VALUES 
+        ('Carlos Mendes', 'Masculino', '1990-05-20', '70kg', '1.75m', 'carlos.mendes@example.com', '12345'),
+        ('Fernanda Souza', 'Feminino', '1995-07-15', '60kg', '1.65m', 'fernanda.souza@example.com', 'senha123'),
+        ('Rafael Lima', 'Masculino', '1988-10-30', '80kg', '1.80m', 'rafael.lima@example.com', 'pass789')
+      `, (err) => {
+        if (err) {
+          console.error("Erro ao inserir exemplos em usuarioAluno:", err.message);
+        } else {
+          console.log("Exemplos inseridos na tabela usuarioAluno.");
+        }
+      });
+    }
+  });
+}
+
+// Chamar a função para inserir exemplos
+insertExamplesIfEmpty();
