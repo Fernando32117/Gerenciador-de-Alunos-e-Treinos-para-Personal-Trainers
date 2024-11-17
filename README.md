@@ -71,16 +71,16 @@ node server/server.js
 ![Login Personal](./screenshots/loginPersonal.png)
 
 ### Tela de dashboard do Personal Trainer
-![Login Personal](./screenshots/dashboardPersonal.png)
+![Dashboard Personal](./screenshots/dashboardPersonal.png)
 
 ### Tela de Login do Aluno
-![Login Personal](./screenshots/loginAluno.png)
+![Login Aluno](./screenshots/loginAluno.png)
 
 ### Tela de dashboard do Aluno
-![Login Personal](./screenshots/dashboardAluno.png)
+![Dashboard Aluno](./screenshots/dashboardAluno.png)
 
 ### Tela de Treinos do Aluno
-![Login Personal](./screenshots/treinosdAlunos.png)
+![Treinos Aluno](./screenshots/treinosAlunos.png)
 
 
 ## Licença
