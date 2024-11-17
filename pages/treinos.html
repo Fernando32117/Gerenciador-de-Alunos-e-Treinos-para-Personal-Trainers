@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treinos do Aluno</title>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Corpo da página */
+    body {
+      font-family: Arial, sans-serif;
+      background: url('../img/personal.jpg') no-repeat center center/cover;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      /* Permite o scroll quando necessário */
+    }
+
+    /* Container de treinos */
+    .treino-page {
+      background: rgba(0, 0, 0, 0.5);
+      /* Fundo semitransparente */
+      backdrop-filter: blur(8px);
+      /* Desfoque no fundo */
+      border-radius: 20px;
+      padding: 20px;
+      width: 80%;
+      max-width: 800px;
+      color: #fff;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .treino-page h2 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    /* Estilo dos treinos */
+    .treino-list {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .treino-list li {
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 15px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.9rem;
+      /* Menor tamanho de fonte */
+      color: #333;
+    }
+
+    .treino-list img {
+      max-width: 100px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+
+    /* Botões de navegação */
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .button-container button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      color: #fff;
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-container button:hover {
+      background-color: #ff9900;
+    }
+
+    /* Ajuste de estilo para as informações */
+    .treino-list li p {
+      font-size: 0.9rem;
+      /* Menor tamanho para as informações */
+      margin: 0;
+      /* Retira o espaço extra entre as linhas */
+    }
+
+    /* Estilo para o filtro de grupos musculares */
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    select {
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ffcc00;
+      /* Borda dourada */
+      background-color: #333;
+      color: #ffcc00;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 200px;
+      /* Ajuste o tamanho do dropdown */
+    }
+
+    option {
+      background-color: #333;
+      color: #ffcc00;
+      border: 1px solid #ffcc00;
+    }
+
+  </style>
+</head>
+
+<body>
+  <!-- Página de Treinos -->
+  <div class="treino-page">
+    <h2>Seus Treinos</h2>
+
+    <!-- Filtro de grupo muscular -->
+    <div class="filter-container">
+      <label for="grupoMuscular" style="color: #ffcc00; font-size: 1.2rem;">Filtrar por Grupo Muscular:</label>
+      <select id="grupoMuscular" onchange="filtrarTreinos()">
+        <option value="">Todos</option>
+        <option value="peito">Peito</option>
+        <option value="perna">Perna</option>
+        <option value="costa">Costa</option>
+        <option value="ombro">Ombro</option>
+        <option value="braco-antebraco">Braço/Antebraço</option>
+      </select>
+    </div>
+
+    <!-- Lista de treinos -->
+    <ul id="listaTreinos" class="treino-list"></ul>
+
+    <!-- Botão de voltar ao dashboard -->
+    <div class="button-container">
+      <button type="button" onclick="voltarDashboard()">Voltar ao Dashboard</button>
+    </div>
+  </div>
+
+  <script>
+    // Função de redirecionamento para voltar ao dashboard
+    function voltarDashboard() {
+      window.location.href = "dashboardAluno.html"; // Redireciona para o dashboard
+    }
+
+    // Quando a página de treinos for carregada
+    document.addEventListener("DOMContentLoaded", function () {
+      const alunoId = localStorage.getItem('alunoId'); // Recupera o ID do aluno do localStorage
+
+      if (!alunoId) {
+        alert('Aluno não autenticado. Redirecionando para a página de login.');
+        window.location.href = "login.html"; // Redireciona para a página de login
+        return;
+      }
+
+      // Busca os treinos do aluno
+      fetch(`http://localhost:3000/treinos/${alunoId}`)
+        .then(response => response.json())
+        .then(treinos => {
+          window.treinos = treinos; // Salva os treinos para filtro
+          exibirTreinos(treinos); // Exibe os treinos na página
+        })
+        .catch(error => {
+          console.error('Erro ao buscar treinos:', error);
+          document.getElementById('listaTreinos').innerHTML = '<p>Erro ao carregar treinos.</p>';
+        });
+    });
+
+    // Função para exibir os treinos
+    function exibirTreinos(treinos) {
+      const listaTreinos = document.getElementById('listaTreinos');
+      listaTreinos.innerHTML = ''; // Limpa a lista antes de exibir
+
+      if (treinos.length === 0) {
+        listaTreinos.innerHTML = '<p>Nenhum treino encontrado.</p>';
+        return;
+      }
+
+      // Adiciona cada treino à lista
+      treinos.forEach(treino => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <p><strong>Grupo Muscular:</strong> ${treino.grupoMuscular}</p>
+          <p><strong>Séries:</strong> ${treino.series}</p>
+          <p><strong>Repetições:</strong> ${treino.repeticoes}</p>
+          <p><strong>Observações:</strong> ${treino.observacoes || 'Nenhuma'}</p>
+          ${treino.gif ? `<img src="data:image/gif;base64,${treino.gif}" alt="Exemplo de exercício">` : ''}
+        `;
+        listaTreinos.appendChild(li);
+      });
+    }
+
+    // Função para filtrar os treinos com base no grupo muscular selecionado
+    function filtrarTreinos() {
+      const grupoMuscularSelecionado = document.getElementById('grupoMuscular').value;
+      let treinosFiltrados;
+
+      if (grupoMuscularSelecionado === '') {
+        // Se não houver filtro, mostra todos os treinos
+        treinosFiltrados = window.treinos;
+      } else {
+        // Filtra os treinos de acordo com o grupo muscular
+        treinosFiltrados = window.treinos.filter(treino => treino.grupoMuscular === grupoMuscularSelecionado);
+      }
+
+      // Exibe os treinos filtrados
+      exibirTreinos(treinosFiltrados);
+    }
+  </script>
+</body>
+
+</html>

@@ -124,6 +124,7 @@ window.onload = function () {
           alert('Login realizado com sucesso! Bem-vindo(a), ' + data.nomeAluno);
 
           // Armazena o nome do aluno no localStorage
+          localStorage.setItem('alunoId', data.id);
           localStorage.setItem('nomeAluno', data.nomeAluno);
 
           window.location.href = "dashboardAluno.html"; // Defina o redirecionamento para o dashboard do aluno

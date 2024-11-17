@@ -144,20 +144,19 @@ function atualizarTabelaTreinoAluno() {
           return;
         }
         console.log('Dados copiados para a nova tabela treinoAluno.');
-      });   
+      });
 
-        // Apagar a tabela antiga
-        db.run(`DROP TABLE treinoAluno_old`, (err) => {
-          if (err) {
-            console.error('Erro ao apagar a tabela antiga:', err.message);
-            return;
-          }
-          console.log('Tabela treinoAluno_old apagada com sucesso.');
-        });
+      // Apagar a tabela antiga
+      db.run(`DROP TABLE treinoAluno_old`, (err) => {
+        if (err) {
+          console.error('Erro ao apagar a tabela antiga:', err.message);
+          return;
+        }
+        console.log('Tabela treinoAluno_old apagada com sucesso.');
       });
     });
-  };
-
+  });
+};
 // // Iniciar a migração (chame manualmente quando necessário)
 // atualizarTabelaTreinoAluno();
 
@@ -332,7 +331,6 @@ app.get('/api/alunos', (req, res) => {
   });
 });
 
-
 // Rota para excluir um aluno pelo alunoLogin (email de login)
 app.delete('/api/alunos/:alunoLogin', (req, res) => {
   const alunoLogin = req.params.alunoLogin;
@@ -354,9 +352,6 @@ app.delete('/api/alunos/:alunoLogin', (req, res) => {
     }
   });
 });
-
-
-
 
 // Criar uma rota POST para o cadastro do aluno
 app.post('/usuarioAluno', (req, res) => {
@@ -381,6 +376,31 @@ app.post('/usuarioAluno', (req, res) => {
   });
 });
 
+
+
+
+
+
+
+
+
+// // Rota de login do aluno
+// app.post('/loginAluno', (req, res) => {
+//   const { alunoLogin, alunoPassword } = req.body;
+
+//   const sql = `SELECT * FROM usuarioAluno WHERE alunoLogin = ? AND alunoSenha = ?`;
+//   db.get(sql, [alunoLogin, alunoPassword], (err, row) => {
+//     if (err) {
+//       return res.status(500).json({ error: err.message });
+//     }
+//     if (!row) {
+//       return res.status(400).json({ message: 'E-mail ou senha inválidos' });
+//     }
+
+//     res.json({ nomeAluno: row.nomeAluno });
+//   });
+// });
+
 // Rota de login do aluno
 app.post('/loginAluno', (req, res) => {
   const { alunoLogin, alunoPassword } = req.body;
@@ -394,9 +414,68 @@ app.post('/loginAluno', (req, res) => {
       return res.status(400).json({ message: 'E-mail ou senha inválidos' });
     }
 
-    res.json({ nomeAluno: row.nomeAluno });
+    // Retorna o ID e o nome do aluno
+    res.json({
+      id: row.id,
+      nomeAluno: row.nomeAluno
+    });
   });
 });
+//Rota para Buscar Treinos
+app.get('/treinos/:alunoId', (req, res) => {
+  const alunoId = req.params.alunoId;
+
+  const sql = `SELECT id, grupoMuscular, series, repeticoes, observacoes, gif FROM treinoAluno WHERE aluno = ?`;
+  db.all(sql, [alunoId], (err, rows) => {
+    if (err) {
+      console.error('Erro ao buscar treinos:', err.message);
+      return res.status(500).json({ error: 'Erro ao buscar treinos.' });
+    }
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Nenhum treino encontrado.' });
+    }
+
+    // Codifica o GIF como base64
+    rows.forEach(treino => {
+      if (treino.gif) {
+        treino.gif = Buffer.from(treino.gif).toString('base64');
+      }
+    });
+
+    res.json(rows); // Retorna os dados incluindo o GIF codificado em Base64
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
