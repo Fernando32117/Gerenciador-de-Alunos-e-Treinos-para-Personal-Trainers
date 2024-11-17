@@ -79,6 +79,9 @@ node server/server.js
 ### Tela de dashboard do Aluno
 ![Login Personal](./screenshots/dashboardAluno.png)
 
+### Tela de Treinos do Aluno
+![Login Personal](./screenshots/treinosdAlunos.png)
+
 
 ## Licença
 
